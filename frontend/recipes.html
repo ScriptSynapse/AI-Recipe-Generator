@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Recipes — AI Recipe Generator</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">🍳</span>
+        AI Recipe Generator
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="generator.html">Generate</a></li>
+        <li><a href="recipes.html" class="active">My Recipes</a></li>
+      </ul>
+      <a href="generator.html" class="btn btn-primary">Start Creating</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header" style="text-align:left; padding-bottom: 24px;">
+      <h1>My Recipes</h1>
+      <p>Every recipe you've saved, in one place.</p>
+    </div>
+
+    <!-- Loading state -->
+    <div id="loading-state" class="state-block">
+      <div class="spinner" style="margin: 0 auto;"></div>
+      <p style="margin-top:16px;">Loading your saved recipes...</p>
+    </div>
+
+    <!-- Error state -->
+    <div id="error-state" class="state-block hidden">
+      <span class="state-emoji">⚠️</span>
+      <h3>Couldn't load your recipes</h3>
+      <p id="error-message">Something went wrong. Please try again.</p>
+      <button class="btn btn-primary" id="retry-btn">Try Again</button>
+    </div>
+
+    <!-- Empty state -->
+    <div id="empty-state" class="state-block hidden">
+      <span class="state-emoji">📋</span>
+      <h3>No saved recipes yet</h3>
+      <p>Start generating your first recipe.</p>
+      <a href="generator.html" class="btn btn-primary">Start Creating</a>
+    </div>
+
+    <!-- Recipes grid -->
+    <div id="recipes-grid" class="recipes-grid hidden" style="padding-bottom: 60px;"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="logo"><span class="logo-mark">🍳</span> AI Recipe Generator</div>
+      <p class="footer-note">Built as an OOP Laboratory project.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/recipes.js"></script>
+</body>
+</html>

@@ -1,0 +1,528 @@
+[
+  {
+    "id": "db-001",
+    "name": "Paneer Tikka Masala",
+    "cuisine": "Indian",
+    "mealType": "Dinner",
+    "dietaryPreference": "Vegetarian",
+    "cookingTime": 35,
+    "difficulty": "Medium",
+    "servings": 2,
+    "ingredients": [
+      {"name": "paneer", "quantity": 250, "unit": "g"},
+      {"name": "tomato", "quantity": 3, "unit": "pieces"},
+      {"name": "onion", "quantity": 1, "unit": "pieces"},
+      {"name": "capsicum", "quantity": 1, "unit": "pieces"},
+      {"name": "cream", "quantity": 2, "unit": "tbsp"},
+      {"name": "ginger garlic paste", "quantity": 1, "unit": "tbsp"},
+      {"name": "garam masala", "quantity": 1, "unit": "tsp"}
+    ],
+    "instructions": [
+      "Cut paneer, onion, and capsicum into cubes.",
+      "Marinate paneer in yogurt and spices for 15 minutes.",
+      "Pan-sear the paneer cubes until lightly golden; set aside.",
+      "Saute onion and ginger garlic paste until translucent.",
+      "Add pureed tomato and cook until the oil separates.",
+      "Stir in garam masala and cream, then add the paneer and capsicum.",
+      "Simmer for 5 minutes and serve hot with naan or rice."
+    ],
+    "nutrition": {"calories": 620, "proteinGrams": 28, "carbsGrams": 24, "fatGrams": 42, "estimated": false}
+  },
+  {
+    "id": "db-002",
+    "name": "Kadai Paneer",
+    "cuisine": "Indian",
+    "mealType": "Dinner",
+    "dietaryPreference": "Vegetarian",
+    "cookingTime": 30,
+    "difficulty": "Medium",
+    "servings": 2,
+    "ingredients": [
+      {"name": "paneer", "quantity": 200, "unit": "g"},
+      {"name": "capsicum", "quantity": 2, "unit": "pieces"},
+      {"name": "onion", "quantity": 1, "unit": "pieces"},
+      {"name": "tomato", "quantity": 2, "unit": "pieces"},
+      {"name": "kadai masala", "quantity": 1, "unit": "tbsp"}
+    ],
+    "instructions": [
+      "Dry roast and coarsely grind the kadai masala spices.",
+      "Saute onion until golden, then add ginger garlic paste.",
+      "Add chopped tomato and cook until soft.",
+      "Stir in the ground spice mix and a splash of water.",
+      "Add capsicum and paneer cubes, tossing gently.",
+      "Cook for 5-6 minutes and garnish with fresh coriander."
+    ],
+    "nutrition": {"calories": 540, "proteinGrams": 24, "carbsGrams": 20, "fatGrams": 34, "estimated": false}
+  },
+  {
+    "id": "db-003",
+    "name": "Paneer Bhurji",
+    "cuisine": "Indian",
+    "mealType": "Breakfast",
+    "dietaryPreference": "Vegetarian",
+    "cookingTime": 15,
+    "difficulty": "Easy",
+    "servings": 2,
+    "ingredients": [
+      {"name": "paneer", "quantity": 200, "unit": "g"},
+      {"name": "onion", "quantity": 1, "unit": "pieces"},
+      {"name": "tomato", "quantity": 1, "unit": "pieces"},
+      {"name": "green chili", "quantity": 1, "unit": "pieces"},
+      {"name": "turmeric", "quantity": 0.5, "unit": "tsp"}
+    ],
+    "instructions": [
+      "Crumble the paneer with your hands or a fork.",
+      "Heat oil and saute onion and green chili until soft.",
+      "Add turmeric and chopped tomato; cook until mushy.",
+      "Fold in the crumbled paneer and cook for 3-4 minutes.",
+      "Season with salt and serve with paratha or toast."
+    ],
+    "nutrition": {"calories": 380, "proteinGrams": 22, "carbsGrams": 12, "fatGrams": 26, "estimated": false}
+  },
+  {
+    "id": "db-004",
+    "name": "Classic Margherita Pizza",
+    "cuisine": "Italian",
+    "mealType": "Dinner",
+    "dietaryPreference": "Vegetarian",
+    "cookingTime": 45,
+    "difficulty": "Medium",
+    "servings": 4,
+    "ingredients": [
+      {"name": "pizza dough", "quantity": 1, "unit": "pieces"},
+      {"name": "tomato", "quantity": 4, "unit": "pieces"},
+      {"name": "mozzarella", "quantity": 200, "unit": "g"},
+      {"name": "basil", "quantity": 10, "unit": "pieces"},
+      {"name": "olive oil", "quantity": 2, "unit": "tbsp"}
+    ],
+    "instructions": [
+      "Preheat the oven to its highest setting with a pizza stone if available.",
+      "Roll out the dough into a thin round base.",
+      "Spread a simple crushed-tomato sauce over the base.",
+      "Tear the mozzarella and scatter it evenly.",
+      "Bake for 8-10 minutes until the crust is charred in spots.",
+      "Top with fresh basil and a drizzle of olive oil before serving."
+    ],
+    "nutrition": {"calories": 900, "proteinGrams": 38, "carbsGrams": 110, "fatGrams": 34, "estimated": false}
+  },
+  {
+    "id": "db-005",
+    "name": "Creamy Tomato Pasta",
+    "cuisine": "Italian",
+    "mealType": "Dinner",
+    "dietaryPreference": "Vegetarian",
+    "cookingTime": 25,
+    "difficulty": "Easy",
+    "servings": 2,
+    "ingredients": [
+      {"name": "pasta", "quantity": 200, "unit": "g"},
+      {"name": "tomato", "quantity": 4, "unit": "pieces"},
+      {"name": "cream", "quantity": 100, "unit": "ml"},
+      {"name": "garlic", "quantity": 3, "unit": "pieces"},
+      {"name": "onion", "quantity": 1, "unit": "pieces"}
+    ],
+    "instructions": [
+      "Boil the pasta in salted water until al dente; reserve some pasta water.",
+      "Saute garlic and onion in olive oil until fragrant.",
+      "Add chopped tomato and simmer into a chunky sauce.",
+      "Stir in cream and simmer for 3-4 minutes.",
+      "Toss the drained pasta into the sauce, loosening with pasta water as needed.",
+      "Finish with black pepper and grated cheese."
+    ],
+    "nutrition": {"calories": 650, "proteinGrams": 18, "carbsGrams": 88, "fatGrams": 24, "estimated": false}
+  },
+  {
+    "id": "db-006",
+    "name": "Vegetable Hakka Noodles",
+    "cuisine": "Chinese",
+    "mealType": "Dinner",
+    "dietaryPreference": "Vegan",
+    "cookingTime": 25,
+    "difficulty": "Easy",
+    "servings": 2,
+    "ingredients": [
+      {"name": "noodles", "quantity": 200, "unit": "g"},
+      {"name": "capsicum", "quantity": 1, "unit": "pieces"},
+      {"name": "carrot", "quantity": 1, "unit": "pieces"},
+      {"name": "cabbage", "quantity": 1, "unit": "cup"},
+      {"name": "soy sauce", "quantity": 2, "unit": "tbsp"},
+      {"name": "spring onion", "quantity": 2, "unit": "pieces"}
+    ],
+    "instructions": [
+      "Boil noodles until just tender, then rinse in cold water and toss with oil.",
+      "Heat a wok over high heat and add a splash of oil.",
+      "Stir-fry carrot, capsicum, and cabbage for 2-3 minutes, keeping them crisp.",
+      "Add the noodles, soy sauce, and a splash of vinegar.",
+      "Toss everything together over high heat for 2 minutes.",
+      "Garnish with spring onion and serve immediately."
+    ],
+    "nutrition": {"calories": 480, "proteinGrams": 12, "carbsGrams": 92, "fatGrams": 8, "estimated": false}
+  },
+  {
+    "id": "db-007",
+    "name": "Chicken Manchurian",
+    "cuisine": "Chinese",
+    "mealType": "Dinner",
+    "dietaryPreference": "No Preference",
+    "cookingTime": 40,
+    "difficulty": "Hard",
+    "servings": 3,
+    "ingredients": [
+      {"name": "chicken", "quantity": 300, "unit": "g"},
+      {"name": "capsicum", "quantity": 1, "unit": "pieces"},
+      {"name": "onion", "quantity": 1, "unit": "pieces"},
+      {"name": "garlic", "quantity": 4, "unit": "pieces"},
+      {"name": "soy sauce", "quantity": 3, "unit": "tbsp"},
+      {"name": "cornstarch", "quantity": 3, "unit": "tbsp"}
+    ],
+    "instructions": [
+      "Coat chicken pieces in cornstarch and shallow fry until crisp; set aside.",
+      "Stir-fry garlic, onion, and capsicum in a hot wok.",
+      "Add soy sauce and a cornstarch slurry to form a glossy sauce.",
+      "Toss the fried chicken back in and coat evenly.",
+      "Simmer for 2-3 minutes until the sauce thickens.",
+      "Garnish with spring onion and serve with fried rice."
+    ],
+    "nutrition": {"calories": 710, "proteinGrams": 44, "carbsGrams": 46, "fatGrams": 32, "estimated": false}
+  },
+  {
+    "id": "db-008",
+    "name": "Loaded Bean Burrito Bowl",
+    "cuisine": "Mexican",
+    "mealType": "Lunch",
+    "dietaryPreference": "Vegan",
+    "cookingTime": 30,
+    "difficulty": "Easy",
+    "servings": 2,
+    "ingredients": [
+      {"name": "black beans", "quantity": 1, "unit": "cup"},
+      {"name": "white rice", "quantity": 1, "unit": "cup"},
+      {"name": "onion", "quantity": 1, "unit": "pieces"},
+      {"name": "tomato", "quantity": 2, "unit": "pieces"},
+      {"name": "corn", "quantity": 0.5, "unit": "cup"},
+      {"name": "lime", "quantity": 1, "unit": "pieces"}
+    ],
+    "instructions": [
+      "Cook the rice and set aside.",
+      "Simmer black beans with cumin, chili powder, and a pinch of salt.",
+      "Dice tomato and onion for a quick fresh salsa; squeeze in lime juice.",
+      "Warm the corn in a dry pan until lightly charred.",
+      "Assemble bowls with rice, beans, salsa, and corn.",
+      "Top with avocado or cilantro if available."
+    ],
+    "nutrition": {"calories": 560, "proteinGrams": 18, "carbsGrams": 102, "fatGrams": 8, "estimated": false}
+  },
+  {
+    "id": "db-009",
+    "name": "Chicken Fajita Tacos",
+    "cuisine": "Mexican",
+    "mealType": "Dinner",
+    "dietaryPreference": "No Preference",
+    "cookingTime": 30,
+    "difficulty": "Medium",
+    "servings": 3,
+    "ingredients": [
+      {"name": "chicken", "quantity": 300, "unit": "g"},
+      {"name": "capsicum", "quantity": 2, "unit": "pieces"},
+      {"name": "onion", "quantity": 1, "unit": "pieces"},
+      {"name": "tortilla", "quantity": 6, "unit": "pieces"},
+      {"name": "lime", "quantity": 1, "unit": "pieces"}
+    ],
+    "instructions": [
+      "Slice chicken and vegetables into thin strips.",
+      "Marinate chicken with lime juice, cumin, and chili powder.",
+      "Sear chicken in a hot pan until browned and cooked through.",
+      "Stir-fry the onion and capsicum until slightly charred.",
+      "Combine chicken and vegetables, then warm the tortillas.",
+      "Assemble tacos with the filling and desired toppings."
+    ],
+    "nutrition": {"calories": 640, "proteinGrams": 42, "carbsGrams": 58, "fatGrams": 22, "estimated": false}
+  },
+  {
+    "id": "db-010",
+    "name": "Classic American Pancakes",
+    "cuisine": "American",
+    "mealType": "Breakfast",
+    "dietaryPreference": "Vegetarian",
+    "cookingTime": 20,
+    "difficulty": "Easy",
+    "servings": 2,
+    "ingredients": [
+      {"name": "all-purpose flour", "quantity": 1.5, "unit": "cup"},
+      {"name": "milk", "quantity": 1, "unit": "cup"},
+      {"name": "egg", "quantity": 1, "unit": "pieces"},
+      {"name": "sugar", "quantity": 2, "unit": "tbsp"},
+      {"name": "butter", "quantity": 2, "unit": "tbsp"}
+    ],
+    "instructions": [
+      "Whisk together flour, sugar, baking powder, and a pinch of salt.",
+      "In a separate bowl, whisk milk, egg, and melted butter.",
+      "Combine wet and dry ingredients until just mixed (a few lumps are fine).",
+      "Pour small circles of batter onto a hot, lightly greased pan.",
+      "Flip once bubbles form on the surface and cook until golden.",
+      "Serve stacked with syrup and extra butter."
+    ],
+    "nutrition": {"calories": 520, "proteinGrams": 14, "carbsGrams": 78, "fatGrams": 16, "estimated": false}
+  },
+  {
+    "id": "db-011",
+    "name": "BBQ Chicken Burger",
+    "cuisine": "American",
+    "mealType": "Lunch",
+    "dietaryPreference": "No Preference",
+    "cookingTime": 30,
+    "difficulty": "Medium",
+    "servings": 2,
+    "ingredients": [
+      {"name": "chicken", "quantity": 300, "unit": "g"},
+      {"name": "burger bun", "quantity": 2, "unit": "pieces"},
+      {"name": "cheese", "quantity": 2, "unit": "slices"},
+      {"name": "onion", "quantity": 1, "unit": "pieces"},
+      {"name": "bbq sauce", "quantity": 3, "unit": "tbsp"}
+    ],
+    "instructions": [
+      "Pound the chicken breast to an even thickness and season well.",
+      "Grill or pan-sear the chicken until fully cooked, basting with BBQ sauce.",
+      "Caramelize sliced onion in a little butter.",
+      "Toast the burger buns lightly.",
+      "Layer chicken, cheese, and caramelized onion on the bun.",
+      "Finish with extra BBQ sauce and serve with fries."
+    ],
+    "nutrition": {"calories": 780, "proteinGrams": 48, "carbsGrams": 62, "fatGrams": 34, "estimated": false}
+  },
+  {
+    "id": "db-012",
+    "name": "Mediterranean Chickpea Salad",
+    "cuisine": "Mediterranean",
+    "mealType": "Lunch",
+    "dietaryPreference": "Vegan",
+    "cookingTime": 15,
+    "difficulty": "Easy",
+    "servings": 2,
+    "ingredients": [
+      {"name": "chickpeas", "quantity": 1.5, "unit": "cup"},
+      {"name": "tomato", "quantity": 2, "unit": "pieces"},
+      {"name": "cucumber", "quantity": 1, "unit": "pieces"},
+      {"name": "onion", "quantity": 0.5, "unit": "pieces"},
+      {"name": "olive oil", "quantity": 2, "unit": "tbsp"},
+      {"name": "lemon", "quantity": 1, "unit": "pieces"}
+    ],
+    "instructions": [
+      "Drain and rinse the chickpeas.",
+      "Dice tomato, cucumber, and onion into small pieces.",
+      "Combine chickpeas and vegetables in a large bowl.",
+      "Whisk olive oil, lemon juice, salt, and oregano for the dressing.",
+      "Toss the salad with the dressing.",
+      "Chill for 10 minutes before serving for best flavor."
+    ],
+    "nutrition": {"calories": 420, "proteinGrams": 16, "carbsGrams": 52, "fatGrams": 16, "estimated": false}
+  },
+  {
+    "id": "db-013",
+    "name": "Grilled Salmon with Lemon",
+    "cuisine": "Mediterranean",
+    "mealType": "Dinner",
+    "dietaryPreference": "Gluten Free",
+    "cookingTime": 25,
+    "difficulty": "Medium",
+    "servings": 2,
+    "ingredients": [
+      {"name": "salmon", "quantity": 2, "unit": "pieces"},
+      {"name": "lemon", "quantity": 1, "unit": "pieces"},
+      {"name": "olive oil", "quantity": 2, "unit": "tbsp"},
+      {"name": "garlic", "quantity": 2, "unit": "pieces"},
+      {"name": "asparagus", "quantity": 1, "unit": "cup"}
+    ],
+    "instructions": [
+      "Marinate the salmon in olive oil, lemon juice, and crushed garlic.",
+      "Preheat a grill pan over medium-high heat.",
+      "Grill the salmon skin-side down for 4-5 minutes, then flip.",
+      "Cook asparagus alongside until tender-crisp.",
+      "Cook the salmon until it flakes easily, about 3-4 more minutes.",
+      "Serve with a fresh lemon wedge and the grilled asparagus."
+    ],
+    "nutrition": {"calories": 480, "proteinGrams": 44, "carbsGrams": 8, "fatGrams": 30, "estimated": false}
+  },
+  {
+    "id": "db-014",
+    "name": "Chicken Katsu Curry",
+    "cuisine": "Japanese",
+    "mealType": "Dinner",
+    "dietaryPreference": "No Preference",
+    "cookingTime": 45,
+    "difficulty": "Hard",
+    "servings": 2,
+    "ingredients": [
+      {"name": "chicken", "quantity": 300, "unit": "g"},
+      {"name": "breadcrumbs", "quantity": 1, "unit": "cup"},
+      {"name": "egg", "quantity": 1, "unit": "pieces"},
+      {"name": "white rice", "quantity": 1.5, "unit": "cup"},
+      {"name": "curry roux", "quantity": 2, "unit": "cubes"},
+      {"name": "onion", "quantity": 1, "unit": "pieces"}
+    ],
+    "instructions": [
+      "Bread the chicken cutlets: flour, then egg, then breadcrumbs.",
+      "Shallow fry the cutlets until golden and crisp; slice into strips.",
+      "Saute onion and simmer with water and curry roux cubes until thickened.",
+      "Cook the rice separately.",
+      "Plate rice with curry sauce and top with the katsu chicken.",
+      "Garnish with pickled ginger if available."
+    ],
+    "nutrition": {"calories": 820, "proteinGrams": 42, "carbsGrams": 96, "fatGrams": 28, "estimated": false}
+  },
+  {
+    "id": "db-015",
+    "name": "Vegetable Sushi Rolls",
+    "cuisine": "Japanese",
+    "mealType": "Lunch",
+    "dietaryPreference": "Vegan",
+    "cookingTime": 40,
+    "difficulty": "Hard",
+    "servings": 2,
+    "ingredients": [
+      {"name": "sushi rice", "quantity": 1.5, "unit": "cup"},
+      {"name": "nori", "quantity": 4, "unit": "sheets"},
+      {"name": "cucumber", "quantity": 1, "unit": "pieces"},
+      {"name": "carrot", "quantity": 1, "unit": "pieces"},
+      {"name": "avocado", "quantity": 1, "unit": "pieces"}
+    ],
+    "instructions": [
+      "Cook sushi rice and season with rice vinegar, sugar, and salt.",
+      "Cut cucumber, carrot, and avocado into thin matchsticks.",
+      "Lay nori on a bamboo mat and spread a thin layer of rice.",
+      "Arrange vegetable strips along one edge.",
+      "Roll tightly using the mat, sealing the edge with water.",
+      "Slice into bite-sized pieces with a sharp, wet knife."
+    ],
+    "nutrition": {"calories": 460, "proteinGrams": 10, "carbsGrams": 88, "fatGrams": 10, "estimated": false}
+  },
+  {
+    "id": "db-016",
+    "name": "Thai Green Curry",
+    "cuisine": "Thai",
+    "mealType": "Dinner",
+    "dietaryPreference": "Dairy Free",
+    "cookingTime": 35,
+    "difficulty": "Medium",
+    "servings": 3,
+    "ingredients": [
+      {"name": "chicken", "quantity": 300, "unit": "g"},
+      {"name": "coconut milk", "quantity": 400, "unit": "ml"},
+      {"name": "green curry paste", "quantity": 2, "unit": "tbsp"},
+      {"name": "capsicum", "quantity": 1, "unit": "pieces"},
+      {"name": "basil", "quantity": 10, "unit": "pieces"}
+    ],
+    "instructions": [
+      "Fry the green curry paste in a splash of coconut milk until fragrant.",
+      "Add the chicken and cook until sealed on all sides.",
+      "Pour in the remaining coconut milk and bring to a gentle simmer.",
+      "Add capsicum and cook until the chicken is cooked through.",
+      "Stir in fresh basil leaves just before serving.",
+      "Serve over steamed jasmine rice."
+    ],
+    "nutrition": {"calories": 640, "proteinGrams": 36, "carbsGrams": 20, "fatGrams": 46, "estimated": false}
+  },
+  {
+    "id": "db-017",
+    "name": "Thai Pad See Ew",
+    "cuisine": "Thai",
+    "mealType": "Dinner",
+    "dietaryPreference": "Vegetarian",
+    "cookingTime": 25,
+    "difficulty": "Medium",
+    "servings": 2,
+    "ingredients": [
+      {"name": "rice noodles", "quantity": 200, "unit": "g"},
+      {"name": "egg", "quantity": 2, "unit": "pieces"},
+      {"name": "broccoli", "quantity": 1, "unit": "cup"},
+      {"name": "soy sauce", "quantity": 3, "unit": "tbsp"},
+      {"name": "garlic", "quantity": 3, "unit": "pieces"}
+    ],
+    "instructions": [
+      "Soak the rice noodles until pliable.",
+      "Scramble the eggs in a hot wok and set aside.",
+      "Stir-fry garlic and broccoli until bright green.",
+      "Add the noodles and soy sauce, tossing constantly to prevent sticking.",
+      "Fold the scrambled egg back in.",
+      "Serve immediately with a wedge of lime."
+    ],
+    "nutrition": {"calories": 560, "proteinGrams": 18, "carbsGrams": 92, "fatGrams": 14, "estimated": false}
+  },
+  {
+    "id": "db-018",
+    "name": "Quick Vegetable Fried Rice",
+    "cuisine": "Chinese",
+    "mealType": "Snack",
+    "dietaryPreference": "Vegetarian",
+    "cookingTime": 15,
+    "difficulty": "Easy",
+    "servings": 2,
+    "ingredients": [
+      {"name": "white rice", "quantity": 2, "unit": "cup"},
+      {"name": "egg", "quantity": 1, "unit": "pieces"},
+      {"name": "carrot", "quantity": 1, "unit": "pieces"},
+      {"name": "onion", "quantity": 1, "unit": "pieces"},
+      {"name": "soy sauce", "quantity": 2, "unit": "tbsp"}
+    ],
+    "instructions": [
+      "Use day-old rice for the best texture.",
+      "Scramble the egg in a hot wok and set aside.",
+      "Stir-fry diced onion and carrot until softened.",
+      "Add the rice, breaking up clumps, and stir-fry for 2-3 minutes.",
+      "Add soy sauce and the scrambled egg, tossing to combine.",
+      "Serve hot, garnished with spring onion."
+    ],
+    "nutrition": {"calories": 420, "proteinGrams": 10, "carbsGrams": 78, "fatGrams": 8, "estimated": false}
+  },
+  {
+    "id": "db-019",
+    "name": "Chocolate Lava Cake",
+    "cuisine": "American",
+    "mealType": "Dessert",
+    "dietaryPreference": "Vegetarian",
+    "cookingTime": 25,
+    "difficulty": "Medium",
+    "servings": 2,
+    "ingredients": [
+      {"name": "dark chocolate", "quantity": 100, "unit": "g"},
+      {"name": "butter", "quantity": 100, "unit": "g"},
+      {"name": "egg", "quantity": 2, "unit": "pieces"},
+      {"name": "sugar", "quantity": 0.5, "unit": "cup"},
+      {"name": "all-purpose flour", "quantity": 3, "unit": "tbsp"}
+    ],
+    "instructions": [
+      "Preheat the oven to 220C (425F) and grease two ramekins.",
+      "Melt chocolate and butter together until smooth.",
+      "Whisk in the eggs and sugar until pale and slightly thickened.",
+      "Fold in the flour until just combined.",
+      "Divide between the ramekins and bake for 10-12 minutes until the edges are set but the center still jiggles slightly.",
+      "Let rest 1 minute, then invert onto plates and serve immediately."
+    ],
+    "nutrition": {"calories": 560, "proteinGrams": 10, "carbsGrams": 48, "fatGrams": 38, "estimated": false}
+  },
+  {
+    "id": "db-020",
+    "name": "Mango Sticky Rice",
+    "cuisine": "Thai",
+    "mealType": "Dessert",
+    "dietaryPreference": "Vegan",
+    "cookingTime": 40,
+    "difficulty": "Easy",
+    "servings": 2,
+    "ingredients": [
+      {"name": "glutinous rice", "quantity": 1, "unit": "cup"},
+      {"name": "coconut milk", "quantity": 200, "unit": "ml"},
+      {"name": "mango", "quantity": 2, "unit": "pieces"},
+      {"name": "sugar", "quantity": 3, "unit": "tbsp"}
+    ],
+    "instructions": [
+      "Soak glutinous rice for at least 2 hours, then steam until tender.",
+      "Warm the coconut milk with sugar and a pinch of salt until dissolved.",
+      "Fold most of the sweetened coconut milk into the warm rice.",
+      "Let the rice absorb the liquid for 10-15 minutes.",
+      "Slice the mango and arrange beside the rice.",
+      "Drizzle the remaining coconut milk over the top before serving."
+    ],
+    "nutrition": {"calories": 480, "proteinGrams": 6, "carbsGrams": 92, "fatGrams": 12, "estimated": false}
+  }
+]

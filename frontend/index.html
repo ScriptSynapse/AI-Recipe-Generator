@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Recipe Generator — Turn your pantry into dinner</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">🍳</span>
+        AI Recipe Generator
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="generator.html">Generate</a></li>
+        <li><a href="recipes.html">My Recipes</a></li>
+      </ul>
+      <a href="generator.html" class="btn btn-primary">Start Creating</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ============================= HERO ============================= -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="hero-eyebrow">● C++ engine · matched or AI-generated</span>
+          <h1>Turn the ingredients in your kitchen into <em>something delicious.</em></h1>
+          <p class="hero-sub">
+            Tell us what's in your fridge, pick a cuisine and a mood, and our recipe
+            engine either pulls the best match from its database or writes you a
+            brand new recipe on the spot.
+          </p>
+          <div class="hero-cta-row">
+            <a href="generator.html" class="btn btn-primary">Start Creating</a>
+            <a href="recipes.html" class="btn btn-secondary">View Saved Recipes</a>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="index-card index-card-back"></div>
+          <div class="index-card index-card-mid"></div>
+          <div class="index-card index-card-front">
+            <span class="card-title">Kadai Paneer</span>
+            <div class="card-line"></div>
+            <div class="card-line short"></div>
+            <div class="card-line"></div>
+            <div class="card-chips">
+              <span class="chip chip-ingredient">paneer</span>
+              <span class="chip chip-ingredient">capsicum</span>
+              <span class="chip chip-diet">Vegetarian</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= CATEGORIES ============================ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Cook in any style tonight</h2>
+          <p>Pick a starting point, or mix ingredients from anywhere — the generator adapts either way.</p>
+        </div>
+        <div class="category-grid">
+          <div class="category-card card card-hover" data-cuisine="Indian">
+            <span class="emoji">🍛</span><span class="name">Indian</span>
+          </div>
+          <div class="category-card card card-hover" data-cuisine="Italian">
+            <span class="emoji">🍝</span><span class="name">Italian</span>
+          </div>
+          <div class="category-card card card-hover" data-cuisine="Chinese">
+            <span class="emoji">🥡</span><span class="name">Chinese</span>
+          </div>
+          <div class="category-card card card-hover" data-cuisine="Mexican">
+            <span class="emoji">🌮</span><span class="name">Mexican</span>
+          </div>
+          <div class="category-card card card-hover" data-cuisine="Japanese">
+            <span class="emoji">🍣</span><span class="name">Japanese</span>
+          </div>
+          <div class="category-card card card-hover" data-cuisine="Mediterranean">
+            <span class="emoji">🥙</span><span class="name">Mediterranean</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================== FEATURES ============================= -->
+    <section class="section" style="background: var(--color-paper-dim);">
+      <div class="container">
+        <div class="section-header">
+          <h2>Built like a real kitchen assistant</h2>
+          <p>Every recipe passes through a scoring engine before it reaches your plate.</p>
+        </div>
+        <div class="feature-grid">
+          <div class="feature-card card">
+            <span class="num">MATCH</span>
+            <h3>Smart database matching</h3>
+            <p>Your ingredients, cuisine, diet, time, and difficulty are scored against a real recipe database — you get the closest fit, not a random guess.</p>
+          </div>
+          <div class="feature-card card">
+            <span class="num">GENERATE</span>
+            <h3>AI fills the gaps</h3>
+            <p>Nothing close enough in the database? An AI generator writes a brand-new recipe around exactly what you have on hand.</p>
+          </div>
+          <div class="feature-card card">
+            <span class="num">CUSTOMIZE</span>
+            <h3>Substitute & adjust freely</h3>
+            <p>Missing an ingredient, want it healthier, or cooking for more people? Adjust any recipe without starting over.</p>
+          </div>
+          <div class="feature-card card">
+            <span class="num">SAVE</span>
+            <h3>Keep what you love</h3>
+            <p>Save any recipe to come back to later, and revisit your personal collection anytime.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= HOW IT WORKS =========================== -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>How it works</h2>
+          <p>Three steps between an empty fridge and dinner.</p>
+        </div>
+        <div class="how-steps">
+          <div class="how-step">
+            <span class="step-num">1</span>
+            <h3>Tell us what you have</h3>
+            <p>List your ingredients and set your preferences — cuisine, diet, time, and servings.</p>
+          </div>
+          <div class="how-step">
+            <span class="step-num">2</span>
+            <h3>Get your recipe</h3>
+            <p>Our engine matches a database recipe or generates a new one built around your ingredients.</p>
+          </div>
+          <div class="how-step">
+            <span class="step-num">3</span>
+            <h3>Customize & cook</h3>
+            <p>Swap ingredients, scale servings, make it healthier, or save it for later.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ CTA BAND ============================ -->
+    <section class="cta-band container">
+      <h2>What's in your kitchen right now?</h2>
+      <p>Give us four ingredients and we'll give you dinner.</p>
+      <a href="generator.html" class="btn btn-primary">Start Creating</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="logo">
+        <span class="logo-mark">🍳</span>
+        AI Recipe Generator
+      </div>
+      <p class="footer-note">Built as an OOP Laboratory project — C++ core, Express API, vanilla JS frontend.</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

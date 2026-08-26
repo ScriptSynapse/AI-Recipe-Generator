@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Recipe — AI Recipe Generator</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">🍳</span>
+        AI Recipe Generator
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="generator.html">Generate</a></li>
+        <li><a href="recipes.html">My Recipes</a></li>
+      </ul>
+      <a href="generator.html" class="btn btn-secondary">Back to Generator</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div id="toast" class="error-banner" style="margin-top:24px;"></div>
+
+    <!-- Loading (shown briefly during regenerate/customize actions) -->
+    <div id="loading-state" class="loading-overlay">
+      <div class="spinner"></div>
+      <p id="loading-message" style="margin:0;">Loading your recipe...</p>
+    </div>
+
+    <!-- Empty state: no recipe in sessionStorage -->
+    <div id="empty-state" class="state-block hidden">
+      <span class="state-emoji">🍽️</span>
+      <h3>No recipe to show yet</h3>
+      <p>Generate a recipe first and it'll appear here.</p>
+      <a href="generator.html" class="btn btn-primary">Start Creating</a>
+    </div>
+
+    <div id="result-layout" class="result-layout hidden" style="padding-top: 24px;">
+
+      <!-- Header card -->
+      <div class="card result-header-card">
+        <div class="result-title-row">
+          <div>
+            <h1 id="recipe-name">Recipe Name</h1>
+            <div class="result-badges">
+              <span class="chip chip-source" id="badge-cuisine">Cuisine</span>
+              <span class="chip chip-diet" id="badge-diet">Diet</span>
+              <span class="chip chip-source" id="badge-source">Source</span>
+            </div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div class="stat">
+            <span class="stat-label">Cooking Time</span>
+            <span class="stat-value" id="stat-time">30 min</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Difficulty</span>
+            <span class="stat-value" id="stat-difficulty">Medium</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Servings</span>
+            <span class="stat-value" id="stat-servings">2</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Calories</span>
+            <span class="stat-value" id="stat-calories">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-columns">
+        <!-- Ingredients + Nutrition -->
+        <div>
+          <div class="card panel" style="margin-bottom: 24px;">
+            <h2>Ingredients</h2>
+            <ul class="ingredient-list" id="ingredient-list"></ul>
+          </div>
+
+          <div class="card panel">
+            <h2>Nutrition</h2>
+            <div class="nutrition-grid">
+              <div class="nutrition-item">
+                <span class="n-label">Calories</span>
+                <span class="n-value" id="n-calories">—</span>
+              </div>
+              <div class="nutrition-item">
+                <span class="n-label">Protein</span>
+                <span class="n-value" id="n-protein">—</span>
+              </div>
+              <div class="nutrition-item">
+                <span class="n-label">Carbohydrates</span>
+                <span class="n-value" id="n-carbs">—</span>
+              </div>
+              <div class="nutrition-item">
+                <span class="n-label">Fat</span>
+                <span class="n-value" id="n-fat">—</span>
+              </div>
+            </div>
+            <p class="estimated-note" id="estimated-note"></p>
+          </div>
+        </div>
+
+        <!-- Instructions + substitution notes -->
+        <div class="card panel">
+          <h2>Instructions</h2>
+          <ol class="step-list" id="step-list"></ol>
+
+          <div class="substitution-notes hidden" id="substitution-block">
+            <h3 style="font-size: 1rem;">Notes & substitutions</h3>
+            <ul id="substitution-list"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="card" style="padding: 26px 30px;">
+        <div class="action-row" style="margin: 0; padding: 0; border: none;">
+          <button class="btn btn-primary" id="action-save">Save Recipe</button>
+          <button class="btn btn-secondary" id="action-regenerate">Regenerate</button>
+          <button class="btn btn-secondary" id="action-healthier">Make Healthier</button>
+          <button class="btn btn-secondary" id="action-substitute">Substitute Ingredient</button>
+          <button class="btn btn-secondary" id="action-servings">Change Servings</button>
+          <a href="generator.html" class="btn btn-ghost">Back to Generator</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="logo"><span class="logo-mark">🍳</span> AI Recipe Generator</div>
+      <p class="footer-note">Built as an OOP Laboratory project.</p>
+    </div>
+  </footer>
+
+  <!-- Substitute ingredient modal -->
+  <div class="modal-backdrop" id="substitute-modal">
+    <div class="modal">
+      <h3>Substitute an ingredient</h3>
+      <p>Tell us which ingredient you don't have, and we'll suggest a replacement.</p>
+      <input type="text" id="substitute-input" placeholder="e.g. cream">
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="substitute-cancel">Cancel</button>
+        <button class="btn btn-primary" id="substitute-confirm">Suggest Substitute</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change servings modal -->
+  <div class="modal-backdrop" id="servings-modal">
+    <div class="modal">
+      <h3>Change servings</h3>
+      <p>All ingredient quantities will scale automatically.</p>
+      <div class="servings-control" style="justify-content:center;">
+        <button type="button" class="servings-btn" id="modal-servings-minus">−</button>
+        <span class="servings-value" id="modal-servings-value">2</span>
+        <button type="button" class="servings-btn" id="modal-servings-plus">+</button>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="servings-cancel">Cancel</button>
+        <button class="btn btn-primary" id="servings-confirm">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/results.js"></script>
+</body>
+</html>

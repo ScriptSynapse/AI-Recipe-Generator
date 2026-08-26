@@ -1,0 +1,19 @@
+{
+  "name": "ai-recipe-generator",
+  "version": "1.0.0",
+  "description": "AI Recipe Generator - OOP Laboratory Project (C++ core + Node.js/Express API + vanilla JS frontend)",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js",
+    "build:cpp": "g++ -std=c++17 -O2 -Wall cpp-core/main.cpp cpp-core/models/Recipe.cpp cpp-core/models/TraditionalRecipe.cpp cpp-core/models/AIRecipe.cpp cpp-core/models/User.cpp cpp-core/models/RecipePreferences.cpp cpp-core/validation/Validator.cpp cpp-core/engine/RecipeMatcher.cpp cpp-core/engine/RecipeCustomizer.cpp cpp-core/generators/DatabaseGenerator.cpp cpp-core/generators/AIGenerator.cpp cpp-core/storage/RecipeStorage.cpp -lcurl -o cpp-core/recipe_engine",
+    "test:cpp": "bash tests/run_tests.sh"
+  },
+  "keywords": ["recipe", "ai", "oop", "cpp", "express"],
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

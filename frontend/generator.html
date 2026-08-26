@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate a Recipe — AI Recipe Generator</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">🍳</span>
+        AI Recipe Generator
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="generator.html" class="active">Generate</a></li>
+        <li><a href="recipes.html">My Recipes</a></li>
+      </ul>
+      <a href="recipes.html" class="btn btn-secondary">My Recipes</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>What's in your kitchen?</h1>
+      <p>Add your ingredients and preferences below — we'll match them against our recipe database or generate something new.</p>
+    </div>
+
+    <div class="generator-layout" style="max-width: 720px; margin: 0 auto;">
+      <div id="error-banner" class="error-banner"></div>
+
+      <form id="generator-form" class="card form-card">
+
+        <!-- Ingredients -->
+        <div class="field-group">
+          <label class="field-label" for="ingredient-input">Ingredients</label>
+          <div class="ingredient-input-row">
+            <input type="text" id="ingredient-input" placeholder="e.g. paneer, tomato, onion" autocomplete="off">
+            <button type="button" id="add-ingredient-btn" class="btn btn-secondary">Add</button>
+          </div>
+          <div id="ingredient-chips" class="ingredient-chips"></div>
+          <p id="ingredient-empty-hint" class="empty-hint">Please add at least one ingredient.</p>
+          <p class="field-hint">Press Enter or click Add after typing each ingredient.</p>
+        </div>
+
+        <!-- Cuisine -->
+        <div class="field-group">
+          <label class="field-label" for="cuisine-select">Cuisine</label>
+          <select id="cuisine-select">
+            <option value="Indian">Indian</option>
+            <option value="Italian">Italian</option>
+            <option value="Chinese">Chinese</option>
+            <option value="Mexican">Mexican</option>
+            <option value="American">American</option>
+            <option value="Mediterranean">Mediterranean</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Thai">Thai</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <!-- Meal Type -->
+        <div class="field-group">
+          <label class="field-label">Meal type</label>
+          <div class="option-grid" id="meal-type-group">
+            <div class="option-pill" data-value="Breakfast">Breakfast</div>
+            <div class="option-pill" data-value="Lunch">Lunch</div>
+            <div class="option-pill selected" data-value="Dinner">Dinner</div>
+            <div class="option-pill" data-value="Snack">Snack</div>
+            <div class="option-pill" data-value="Dessert">Dessert</div>
+          </div>
+        </div>
+
+        <!-- Dietary Preference -->
+        <div class="field-group">
+          <label class="field-label" for="diet-select">Dietary preference</label>
+          <select id="diet-select">
+            <option value="No Preference">No Preference</option>
+            <option value="Vegetarian">Vegetarian</option>
+            <option value="Vegan">Vegan</option>
+            <option value="Gluten Free">Gluten Free</option>
+            <option value="Dairy Free">Dairy Free</option>
+            <option value="High Protein">High Protein</option>
+            <option value="Low Carb">Low Carb</option>
+          </select>
+        </div>
+
+        <!-- Cooking Time -->
+        <div class="field-group">
+          <label class="field-label">Cooking time</label>
+          <div class="option-grid" id="cooking-time-group">
+            <div class="option-pill" data-value="15">15 min</div>
+            <div class="option-pill selected" data-value="30">30 min</div>
+            <div class="option-pill" data-value="45">45 min</div>
+            <div class="option-pill" data-value="60">60 min</div>
+            <div class="option-pill" data-value="90">90+ min</div>
+          </div>
+        </div>
+
+        <!-- Difficulty -->
+        <div class="field-group">
+          <label class="field-label">Difficulty</label>
+          <div class="option-grid" id="difficulty-group">
+            <div class="option-pill" data-value="Easy">Easy</div>
+            <div class="option-pill selected" data-value="Medium">Medium</div>
+            <div class="option-pill" data-value="Hard">Hard</div>
+          </div>
+        </div>
+
+        <!-- Servings -->
+        <div class="field-group">
+          <label class="field-label">Servings</label>
+          <div class="servings-control">
+            <button type="button" class="servings-btn" id="servings-minus" aria-label="Decrease servings">−</button>
+            <span class="servings-value" id="servings-value">2</span>
+            <button type="button" class="servings-btn" id="servings-plus" aria-label="Increase servings">+</button>
+          </div>
+        </div>
+
+        <div class="generate-cta">
+          <button type="submit" class="btn btn-primary btn-block" id="generate-btn">Generate Recipe</button>
+        </div>
+      </form>
+
+      <div id="loading-state" class="loading-overlay">
+        <div class="spinner"></div>
+        <p id="loading-message" style="margin:0;">Creating your recipe...</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="logo"><span class="logo-mark">🍳</span> AI Recipe Generator</div>
+      <p class="footer-note">Built as an OOP Laboratory project.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/generator.js"></script>
+</body>
+</html>
