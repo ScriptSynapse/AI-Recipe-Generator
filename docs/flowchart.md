@@ -120,3 +120,64 @@ Invalid input example (empty ingredients):
                          "message": "Please enter at least one ingredient." } }
        -> recipeController maps EMPTY_INGREDIENTS -> HTTP 400
 ```
+
+## 5. Secured request flow (current)
+
+```
+Request
+  |
+  v
+security headers -> request id -> CORS -> authenticate
+  |
+  v
+rate limit ----(exceeded)----> 429, audit RATE_LIMIT
+  |
+  v
+requirePermission ----(no)----> 401 / 403, audit UNAUTHORIZED_ACCESS
+  |
+  v
+payload shape check ----(bad)----> 400
+  |
+  v
+C++ engine
+  |
+  v
+SecurityPipeline: InputValidator -> PromptInjectionDetector -> XSSDetector
+  |  (any rejects)--> 400, event audited, STOP (no provider called)
+  v
+database match good enough? --yes--> TraditionalRecipe
+  |no
+  v
+ModelRouter: Claude -> Gemini -> OpenAI -> Groq -> Local
+  |   each answer: AIOutputValidator + RecipeBuilder
+  |   (invalid / unavailable / error) --> next provider, event audited
+  v
+all failed? --yes--> offline template generator (usedFallback = true)
+  |
+  v
+IngredientConsistencyChecker -> { recipe, matchInfo, consistency }
+  |
+  v
+Node: record usage (successful signed-in requests only) -> JSON to browser
+```
+
+## 6. AI Model Lab comparison flow
+
+```
+POST /api/ai/compare  (login + ai-lab:use, compare rate limit)
+  -> same input SecurityPipeline as generate
+  -> ModelComparator: every AVAILABLE provider called in parallel (std::async)
+  -> per model: AIOutputValidator -> RecipeBuilder -> RecipeEvaluator score
+  -> fastest / best chosen only among validated replies
+  -> Node records analytics and usage for models actually called
+```
+
+## 7. Login and session flow
+
+```
+POST /api/auth/login -> auth rate limit -> LoginThrottle check
+  -> scrypt verify (dummy hash if user unknown)
+  -> fail: AUTH_FAILURE audited, throttle count++
+  -> ok: new random token; SHA hash stored server-side; HttpOnly SameSite=Strict cookie; AUTH_SUCCESS audited
+Each later request: cookie -> hash -> session lookup -> expiry check -> req.auth.user
+```

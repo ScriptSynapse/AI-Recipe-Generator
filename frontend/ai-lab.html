@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Model Lab — RecipeAI Sentinel</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/sentinel.css">
+  <link rel="stylesheet" href="css/polish.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a href="index.html" class="logo">
+        <span class="logo-mark" aria-hidden="true">S</span>
+        <span class="logo-text">RecipeAI Sentinel<span class="logo-sub">Secure Multi-LLM Recipe Intelligence Platform</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="generator.html">Generate</a></li>
+        <li><a href="ai-lab.html" class="active" aria-current="page">AI Lab</a></li>
+        <li><a href="recipes.html">My Recipes</a></li>
+        <li class="admin-only hidden"><a href="security.html">Security</a></li>
+        <li class="admin-only hidden"><a href="analytics.html">Analytics</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li id="auth-nav" class="nav-auth"><a href="login.html">Sign in</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header" style="text-align:left; padding-bottom: 24px;">
+      <h1>AI Model Lab</h1>
+      <p>Ask every configured model the same question, then compare the recipes they return — validated, scored and timed.</p>
+    </div>
+
+    <div id="lab-signin" class="card panel hidden">
+      <p>The AI Lab calls external models, so it is available to signed-in users.</p>
+      <a id="lab-signin-link" class="btn btn-primary" href="login.html">Sign in</a>
+    </div>
+
+    <div id="lab-main" class="hidden">
+      <section class="card panel" aria-labelledby="lab-models-title">
+        <h2 id="lab-models-title" class="lab-h2">Models</h2>
+        <ul id="lab-models" class="lab-model-list"></ul>
+      </section>
+
+      <form id="lab-form" class="card panel lab-form" novalidate>
+        <h2 class="lab-h2">Compare</h2>
+        <div class="field-group">
+          <label class="field-label" for="lab-ingredients">Ingredients</label>
+          <input id="lab-ingredients" type="text" autocomplete="off" maxlength="600" value="paneer, tomato, onion">
+          <div class="field-hint">Separate with commas. Every model is given exactly the same prompt.</div>
+        </div>
+        <div class="lab-row">
+          <div class="field-group">
+            <label class="field-label" for="lab-cuisine">Cuisine</label>
+            <select id="lab-cuisine">
+              <option>Indian</option><option>Italian</option><option>Chinese</option><option>Mexican</option>
+              <option>American</option><option>Mediterranean</option><option>Japanese</option><option>Thai</option><option>Other</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="lab-diet">Diet</label>
+            <select id="lab-diet">
+              <option>No Preference</option><option selected>Vegetarian</option><option>Vegan</option>
+              <option>Gluten Free</option><option>Dairy Free</option><option>High Protein</option><option>Low Carb</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="lab-time">Max time</label>
+            <select id="lab-time"><option value="15">15 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">60 min</option></select>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="lab-mode">Mode</label>
+            <select id="lab-mode">
+              <option value="all">Compare all</option>
+              <option value="fastest">Highlight fastest</option>
+              <option value="best">Highlight best quality</option>
+            </select>
+          </div>
+        </div>
+        <button id="lab-run" type="submit" class="btn btn-primary">Compare models</button>
+        <div id="lab-status" class="field-hint" role="status" aria-live="polite"></div>
+      </form>
+
+      <section id="lab-results" class="hidden" aria-labelledby="lab-results-title">
+        <h2 id="lab-results-title" class="lab-h2">Results</h2>
+        <p id="lab-summary" class="lab-summary"></p>
+        <div id="lab-grid" class="lab-grid"></div>
+      </section>
+
+      <section id="lab-admin" class="card panel hidden" aria-labelledby="lab-admin-title">
+        <h2 id="lab-admin-title" class="lab-h2">Benchmarks <span class="chip chip-source">admin</span></h2>
+        <p class="field-hint">Lifetime figures from every comparison recorded so far. Nothing here is estimated: with no runs recorded the table is empty.</p>
+        <div class="lab-row">
+          <div class="field-group">
+            <label class="field-label" for="lab-runs">Benchmark runs</label>
+            <select id="lab-runs"><option>1</option><option>2</option><option>3</option></select>
+          </div>
+          <div class="field-group lab-align-end">
+            <button id="lab-benchmark" type="button" class="btn btn-secondary">Run benchmark</button>
+          </div>
+        </div>
+        <div id="lab-analytics" class="lab-table-wrap"></div>
+
+        <h3 class="lab-h2 lab-history-title">Benchmark history</h3>
+        <p class="field-hint">Every recorded comparison and benchmark, newest first. Tick two runs to compare what was measured in each.</p>
+        <form id="lab-history-form" class="lab-row" aria-label="Filter benchmark history">
+          <div class="field-group">
+            <label class="field-label" for="lab-h-provider">Model</label>
+            <select id="lab-h-provider"><option value="">All</option></select>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="lab-h-source">Type</label>
+            <select id="lab-h-source"><option value="">All</option><option value="lab">Lab comparison</option><option value="benchmark">Benchmark</option></select>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="lab-h-since">From</label>
+            <input type="date" id="lab-h-since">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="lab-h-until">To</label>
+            <input type="date" id="lab-h-until">
+          </div>
+          <div class="field-group lab-align-end">
+            <button id="lab-h-apply" type="submit" class="btn btn-secondary">Apply</button>
+          </div>
+        </form>
+        <p id="lab-h-status" class="field-hint" role="status"></p>
+        <div id="lab-history" class="lab-table-wrap"></div>
+        <button id="lab-h-compare" type="button" class="btn btn-secondary" disabled>Compare selected runs</button>
+        <div id="lab-h-diff" class="lab-table-wrap" aria-live="polite"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="logo"><span class="logo-mark" aria-hidden="true">S</span> RecipeAI Sentinel</div>
+      <p class="footer-note">Secure Multi-LLM Recipe Intelligence Platform &middot; OOP Laboratory project: C++ core, Express API, vanilla JS frontend. <a href="landing.html">About</a></p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/authHelpers.js"></script>
+  <script src="js/auth-status.js"></script>
+  <script src="js/labModel.js"></script>
+  <script src="js/ai-lab.js"></script>
+</body>
+</html>

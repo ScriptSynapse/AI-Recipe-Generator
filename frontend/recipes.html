@@ -3,24 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Recipes — AI Recipe Generator</title>
+  <title>My Recipes — RecipeAI Sentinel</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/sentinel.css">
+  <link rel="stylesheet" href="css/polish.css">
 </head>
 <body>
 
   <header class="site-header">
-    <nav class="nav">
+    <nav class="nav" aria-label="Main">
       <a href="index.html" class="logo">
-        <span class="logo-mark">🍳</span>
-        AI Recipe Generator
+        <span class="logo-mark" aria-hidden="true">S</span>
+        <span class="logo-text">RecipeAI Sentinel<span class="logo-sub">Secure Multi-LLM Recipe Intelligence Platform</span></span>
       </a>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html">Dashboard</a></li>
         <li><a href="generator.html">Generate</a></li>
-        <li><a href="recipes.html" class="active">My Recipes</a></li>
+        <li><a href="ai-lab.html">AI Lab</a></li>
+        <li><a href="recipes.html" class="active" aria-current="page">My Recipes</a></li>
+        <li class="admin-only hidden"><a href="security.html">Security</a></li>
+        <li class="admin-only hidden"><a href="analytics.html">Analytics</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li id="auth-nav" class="nav-auth"><a href="login.html">Sign in</a></li>
       </ul>
-      <a href="generator.html" class="btn btn-primary">Start Creating</a>
     </nav>
   </header>
 
@@ -52,18 +58,54 @@
       <a href="generator.html" class="btn btn-primary">Start Creating</a>
     </div>
 
+    <!-- Search, filters and sort (done in the browser on the recipes already loaded) -->
+    <section id="recipes-toolbar" class="recipes-toolbar hidden" aria-label="Search and filter recipes">
+      <div class="toolbar-field toolbar-search">
+        <label class="field-label" for="filter-query">Search</label>
+        <input type="text" id="filter-query" maxlength="100" placeholder="Name or cuisine" autocomplete="off">
+      </div>
+      <div class="toolbar-field">
+        <label class="field-label" for="filter-cuisine">Cuisine</label>
+        <select id="filter-cuisine"><option value="">All</option></select>
+      </div>
+      <div class="toolbar-field">
+        <label class="field-label" for="filter-diet">Diet</label>
+        <select id="filter-diet"><option value="">All</option></select>
+      </div>
+      <div class="toolbar-field">
+        <label class="field-label" for="filter-difficulty">Difficulty</label>
+        <select id="filter-difficulty"><option value="">All</option></select>
+      </div>
+      <div class="toolbar-field">
+        <label class="field-label" for="filter-sort">Sort</label>
+        <select id="filter-sort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select>
+      </div>
+      <button type="button" id="filter-reset" class="btn btn-ghost">Reset</button>
+      <p id="recipes-count" class="toolbar-count" aria-live="polite"></p>
+    </section>
+
+    <!-- Nothing matches the current filters -->
+    <div id="no-match-state" class="state-block hidden">
+      <h3>No recipes match</h3>
+      <p>Try a different search or press Reset.</p>
+    </div>
+
     <!-- Recipes grid -->
     <div id="recipes-grid" class="recipes-grid hidden" style="padding-bottom: 60px;"></div>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-grid">
-      <div class="logo"><span class="logo-mark">🍳</span> AI Recipe Generator</div>
-      <p class="footer-note">Built as an OOP Laboratory project.</p>
+      <div class="logo"><span class="logo-mark" aria-hidden="true">S</span> RecipeAI Sentinel</div>
+      <p class="footer-note">Secure Multi-LLM Recipe Intelligence Platform &middot; OOP Laboratory project: C++ core, Express API, vanilla JS frontend. <a href="landing.html">About</a></p>
     </div>
   </footer>
 
   <script src="js/api.js"></script>
+  <script src="js/authHelpers.js"></script>
+  <script src="js/auth-status.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/recipesModel.js"></script>
   <script src="js/recipes.js"></script>
 </body>
 </html>

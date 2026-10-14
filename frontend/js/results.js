@@ -10,6 +10,9 @@
 (function () {
   let currentRecipe = null;
   let currentPreferences = null;
+  let currentMatchInfo = null;      // present only for a fresh generation; drives the pipeline panel
+  let currentConsistency = null;     // the engine's ingredient-consistency report (fresh generations only)
+  let currentElapsedMs = null;
 
   const els = {
     loading: document.getElementById('loading-state'),
@@ -46,12 +49,6 @@
     }
   }
 
-  function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = String(str);
-    return div.innerHTML;
-  }
-
   function formatQuantity(qty) {
     const n = Number(qty);
     if (Number.isInteger(n)) return String(n);
@@ -59,6 +56,48 @@
   }
 
   // --- Rendering ----------------------------------------------------------
+  function renderProvenance(recipe) {
+    const meta = document.getElementById('meta-list');
+    meta.textContent = '';
+    ResultModel.details(recipe, currentElapsedMs).forEach(([k, v]) => {
+      const li = document.createElement('li');
+      const key = document.createElement('span'); key.textContent = k;
+      const val = document.createElement('strong'); val.textContent = v;
+      li.appendChild(key); li.appendChild(val);
+      meta.appendChild(li);
+    });
+
+    const panel = document.getElementById('pipeline-panel');
+    const list = document.getElementById('pipeline-list');
+    list.textContent = '';
+    const rows = ResultModel.pipeline(recipe, currentMatchInfo);
+    rows.forEach((r) => {
+      const li = document.createElement('li');
+      li.className = r.status === 'pass' ? 'check-pass' : 'check-na';
+      const mark = document.createElement('span'); mark.className = 'check-mark'; mark.textContent = r.status === 'pass' ? '\u2713' : '\u2013';
+      const label = document.createElement('span'); label.textContent = r.label;
+      li.appendChild(mark); li.appendChild(label);
+      if (r.detail) { const d = document.createElement('span'); d.className = 'check-detail'; d.textContent = r.detail; li.appendChild(d); }
+      list.appendChild(li);
+    });
+    if (rows.length) panel.classList.remove('hidden'); else panel.classList.add('hidden');
+
+    const safety = document.getElementById('safety-list');
+    safety.textContent = '';
+    const checks = ResultModel.safetyChecks(currentConsistency);
+    checks.forEach((c) => {
+      const li = document.createElement('li');
+      li.className = c.status === 'pass' ? 'check-pass' : 'check-warn';
+      const mark = document.createElement('span'); mark.className = 'check-mark'; mark.textContent = c.status === 'pass' ? '\u2713' : '\u26A0';
+      const label = document.createElement('span'); label.textContent = c.label;
+      li.appendChild(mark); li.appendChild(label);
+      if (c.detail) { const d = document.createElement('span'); d.className = 'check-detail'; d.textContent = c.detail; li.appendChild(d); }
+      safety.appendChild(li);
+    });
+    const safetyPanel = document.getElementById('safety-panel');
+    if (checks.length) safetyPanel.classList.remove('hidden'); else safetyPanel.classList.add('hidden');
+  }
+
   function renderRecipe(recipe) {
     currentRecipe = recipe;
 
@@ -76,18 +115,26 @@
     document.getElementById('stat-calories').textContent = recipe.nutrition ? Math.round(recipe.nutrition.calories) : '—';
 
     const ingredientList = document.getElementById('ingredient-list');
-    ingredientList.innerHTML = '';
+    ingredientList.textContent = '';
     (recipe.ingredients || []).forEach((ing) => {
       const li = document.createElement('li');
-      li.innerHTML = `<span>${escapeHtml(ing.name)}</span><span class="ingredient-qty">${formatQuantity(ing.quantity)} ${escapeHtml(ing.unit || '')}</span>`;
+      const name = document.createElement('span');
+      name.textContent = ing.name;
+      const qty = document.createElement('span');
+      qty.className = 'ingredient-qty';
+      qty.textContent = `${formatQuantity(ing.quantity)} ${ing.unit || ''}`;
+      li.appendChild(name);
+      li.appendChild(qty);
       ingredientList.appendChild(li);
     });
 
     const stepList = document.getElementById('step-list');
-    stepList.innerHTML = '';
+    stepList.textContent = '';
     (recipe.instructions || []).forEach((step) => {
       const li = document.createElement('li');
-      li.innerHTML = `<span>${escapeHtml(step)}</span>`;
+      const text = document.createElement('span');
+      text.textContent = step;
+      li.appendChild(text);
       stepList.appendChild(li);
     });
 
@@ -102,7 +149,7 @@
 
     const subsBlock = document.getElementById('substitution-block');
     const subsList = document.getElementById('substitution-list');
-    subsList.innerHTML = '';
+    subsList.textContent = '';
     if (recipe.substitutionNotes && recipe.substitutionNotes.length > 0) {
       recipe.substitutionNotes.forEach((note) => {
         const li = document.createElement('li');
@@ -115,7 +162,8 @@
     }
 
     // Persist the (possibly updated) recipe so a page refresh doesn't lose it.
-    sessionStorage.setItem('lastRecipeResult', JSON.stringify({ recipe }));
+    renderProvenance(recipe);
+    sessionStorage.setItem('lastRecipeResult', JSON.stringify({ recipe, matchInfo: currentMatchInfo, consistency: currentConsistency }));
   }
 
   // --- Initial load ---------------------------------------------------
@@ -132,6 +180,10 @@
     try {
       const data = JSON.parse(stored);
       currentPreferences = storedPrefs ? JSON.parse(storedPrefs) : null;
+      currentMatchInfo = data.matchInfo || null;
+      currentConsistency = data.consistency || null;
+      const ms = Number(sessionStorage.getItem('lastGenerationMs'));
+      currentElapsedMs = Number.isFinite(ms) && ms > 0 && currentMatchInfo ? ms : null;
       renderRecipe(data.recipe);
       setLoading(false);
     } catch (e) {
@@ -146,11 +198,28 @@
     btn.disabled = true;
     const result = await RecipeAPI.save(currentRecipe);
     btn.disabled = false;
+    if (AuthHelpers.isAuthRequired(result)) {
+      // The recipe stays in sessionStorage, so this page re-renders it after sign-in.
+      window.location.href = AuthHelpers.loginUrlFor('results.html');
+      return;
+    }
     if (result.success) {
       showToast('Recipe saved successfully.', false);
     } else {
       showToast((result.error && result.error.message) || 'Could not save this recipe.', true);
     }
+  });
+
+  // --- Action: Compare with another model -----------------------------
+  // Hands the ORIGINAL request to the AI Lab (it fills the form; it never runs
+  // a comparison by itself, because a comparison calls every configured model).
+  document.getElementById('action-compare').addEventListener('click', () => {
+    if (!currentPreferences) {
+      showToast('Original preferences not found — please generate a new recipe.', true);
+      return;
+    }
+    sessionStorage.setItem('labPrefill', JSON.stringify({ mode: 'all', preferences: currentPreferences }));
+    window.location.href = 'ai-lab.html';
   });
 
   // --- Action: Regenerate ---------------------------------------------
@@ -160,8 +229,12 @@
       return;
     }
     setLoading(true, 'Cooking up something different...');
+    const started = Date.now();
     const result = await RecipeAPI.regenerate(currentPreferences, currentRecipe.id, false);
     if (result.success) {
+      currentMatchInfo = result.data.matchInfo || null;
+      currentConsistency = result.data.consistency || null;
+      currentElapsedMs = Date.now() - started;
       renderRecipe(result.data.recipe);
       setLoading(false);
       showToast('Here is a new recipe.', false);

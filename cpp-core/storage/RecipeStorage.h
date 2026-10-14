@@ -1,6 +1,7 @@
 #ifndef RECIPE_STORAGE_H
 #define RECIPE_STORAGE_H
 
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include "../json.hpp"
@@ -19,6 +20,19 @@ public:
 };
 
 /*
+ * InvalidRecipeException
+ * -----------------------------------------------------------------------
+ * Thrown when a record submitted for saving is malformed or oversized.
+ * Derives from std::invalid_argument so the CLI maps it to a client error
+ * (HTTP 400), distinct from StorageException (server-side I/O failure).
+ * Messages are written to be safe to show to end users.
+ */
+class InvalidRecipeException : public std::invalid_argument {
+public:
+    explicit InvalidRecipeException(const std::string& message) : std::invalid_argument(message) {}
+};
+
+/*
  * RecipeStorage
  * -----------------------------------------------------------------------
  * Handles all persistence for saved recipes using C++ file streams
@@ -30,13 +44,23 @@ private:
     std::string filePath;
 
     std::vector<json> loadAll() const;
-    void writeAll(const std::vector<json>& recipes) const;
+    void writeAll(const std::vector<json>& recipes) const;   // atomic: temp file + rename
+
+    static bool isSafeId(const std::string& id);
+    static std::string generateId();
 
 public:
+    // Shape and size rules for one record (object, text name, bounded lists/size).
+    // Public so a caller can validate BEFORE rebuilding the record.
+    static void validateRecord(const json& recipeJson);       // throws InvalidRecipeException
+
     explicit RecipeStorage(const std::string& filePath);
 
-    // Persists a recipe (as JSON) and returns the stored record
-    // (with a generated savedAt timestamp).
+    // Validates and persists a recipe (as JSON) under a cross-process lock
+    // and returns the stored record (with a generated savedAt timestamp).
+    // A client-supplied id is kept only if it is safe (1-64 chars of
+    // [A-Za-z0-9._-]) and not already stored; otherwise a fresh id is
+    // generated, so ids are always unique and URL-safe.
     json save(const json& recipeJson);
 
     // Returns all saved recipes, most recently saved first.

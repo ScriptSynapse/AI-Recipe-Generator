@@ -17,6 +17,14 @@ struct MatchResult {
     double dietScore = 0.0;
     double timeScore = 0.0;
     double difficultyScore = 0.0;
+
+    // Fraction (0-100) of the RECIPE's ingredient list that the user
+    // actually has, i.e. the inverse direction of ingredientScore (which
+    // measures how many of the USER's ingredients the recipe uses).
+    // A recipe can score perfectly on ingredientScore while still
+    // requiring several ingredients the user never listed -- coverage is
+    // what "strictOnlyGivenIngredients" mode checks instead.
+    double ingredientCoverage = 0.0;
 };
 
 /*
@@ -42,9 +50,10 @@ private:
 
     double scoreIngredients(const std::vector<std::string>& userIngredients,
                              const std::vector<std::string>& recipeIngredients) const;
+    double computeIngredientCoverage(const std::vector<std::string>& userIngredients,
+                                      const std::vector<std::string>& recipeIngredients) const;
     double scoreCuisine(const std::string& userCuisine, const std::string& recipeCuisine) const;
     double scoreDiet(const std::string& userDiet, const std::string& recipeDiet) const;
-    double scoreCookingTime(int userTime, int recipeTime) const;
     double scoreDifficulty(const std::string& userDifficulty, const std::string& recipeDifficulty) const;
 
 public:

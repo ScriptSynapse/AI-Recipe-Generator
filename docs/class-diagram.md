@@ -124,3 +124,89 @@ main.cpp
   -> recipe->toJson()
   -> printed to stdout, read by backend/services/cppBridge.js
 ```
+
+## 6. RecipeTemplateEngine (offline fallback content generation)
+
+`AIGenerator::callFallbackProvider()` delegates to
+`RecipeTemplateEngine::generate()` to avoid producing the same generic
+instructions for every dish. It's a pure classification/templating
+utility (every method `static`, no instance state):
+
+```
+RecipeTemplateEngine::generate(preferences, rng)
+  -> classifyAll(preferences.getIngredients())
+       -> classifyIngredient() per ingredient, via keyword matching, into:
+            Protein | Dairy | Grain | Vegetable | Fruit | Sweet | Liquid | Other
+  -> determineDishMode(classification, preferences)
+       -> Dessert    if mealType == Dessert, or sweets present with no protein
+       -> Breakfast  if mealType == Breakfast
+       -> Salad      if no protein/grain, raw produce present, quick + easy
+       -> StirFry    if cuisine in {Chinese, Thai, Japanese} and time <= 40
+       -> Simmer     if a liquid ingredient is present, or cuisine in
+                      {Indian, Mexican, Mediterranean}
+       -> General     otherwise (catch-all template)
+  -> buildTitle(mode, classification, preferences)
+  -> buildInstructions(mode, classification, preferences, rng)
+       -> a distinct instruction sequence per DishMode, referencing the
+          ACTUAL classified ingredient names (e.g. "Whisk the eggs with
+          the sugar" vs. "Stir-fry the chicken and broccoli") rather
+          than one fixed template with names substituted in
+```
+
+This only runs when `AIGenerator` falls back to the offline path (no
+API key configured, or the real provider call failed) — a successful
+real-AI call already produces dish-appropriate instructions on its own,
+since the model reasons about the ingredients directly.
+
+## 7. AI provider layer (Strategy, Template Method, Composite, Factory)
+
+```
+            +---------------------------+
+            |   <<interface>> LLMProvider|
+            |---------------------------|
+            | generate(prompt) : string  |
+            | getProviderName/ModelName  |
+            | isAvailable() / getStatus()|
+            | setEventManager(mgr)       |
+            +------^----------^---------+
+                   |          |
+     +-------------+--+   +---+----------------+
+     | HttpLLMProvider |   |    ModelRouter     |  Composite: owns an ordered
+     |  (template)     |   |  chain of providers|  vector<shared_ptr<LLMProvider>>
+     +--^--^--^--^--^--+   +--------------------+
+        |  |  |  |  |
+   Claude Gemini OpenAI Groq Local      each uses an injected HttpClient
+                                        (CurlHttpClient | test fake)
+
+LLMProviderFactory  --creates-->  LLMProvider by name
+AIGenerator         --uses-->     LLMProvider (a ModelRouter in production)
+AIOrchestrator      --runs-->     many providers concurrently -> vector<ModelResult>
+ModelComparator     --uses-->     AIOrchestrator + AIOutputValidator + RecipeEvaluator
+```
+
+## 8. Security layer (Chain of Responsibility, Observer)
+
+```
+SecurityPipeline  ◇--> SecurityCheck (interface: check(SecurityContext) -> SecurityCheckResult)
+                         ^
+        +----------------+-------------------+-------------------+
+ InputValidatorCheck  PromptInjectionDetectorCheck  XSSDetectorCheck  AIOutputValidatorCheck
+   (wraps Validator)    (PromptSecurityScanner)      (XSSDetector)     (wraps AIOutputValidator)
+
+SecurityEventFactory --creates--> SecurityEvent
+SecurityEventManager (subject) --notifies--> SecurityEventObserver
+        ResponseEventCollector (observer) -> events returned in the engine response
+```
+
+## 9. Recipe construction and evaluation
+
+```
+RecipeBuilder (Builder)  --build()-->  Recipe  (TraditionalRecipe | AIRecipe)
+                           validates fields; throws ValidationException (RECIPE_* codes)
+RecipeEvaluator            scores a Recipe against RecipePreferences; findDietConflicts()
+IngredientConsistencyChecker (static check)  --> ConsistencyReport {missingRequired, additional, suspicious, dietConflicts}
+RecipeStorage  ◆--> FileLock (RAII)           saved_recipes.json, temp file + atomic rename
+```
+
+Relationship key: ◆ composition (owner controls lifetime), ◇ aggregation, ^ inheritance/implementation.
+Not built: `StorageRepository`, `AlertManager`, `SecurityDashboard` (C++), `RateLimitChecker` (C++), `IngredientSafetyChecker`.

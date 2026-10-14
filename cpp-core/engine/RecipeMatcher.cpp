@@ -1,4 +1,5 @@
 #include "RecipeMatcher.h"
+#include "../utils/ScoringUtil.h"
 #include <algorithm>
 #include <cctype>
 #include <cmath>
@@ -33,6 +34,39 @@ double RecipeMatcher::scoreIngredients(const std::vector<std::string>& userIngre
     return (static_cast<double>(matched) / userIngredients.size()) * 100.0;
 }
 
+// Coverage is the reverse direction of scoreIngredients: what fraction of
+// the RECIPE's own ingredient list is something the user actually has.
+// A recipe that calls for 6 ingredients when the user only listed 3 has
+// low coverage even if every one of the user's 3 ingredients is used.
+double RecipeMatcher::computeIngredientCoverage(const std::vector<std::string>& userIngredients,
+                                                const std::vector<std::string>& recipeIngredients) const {
+    if (recipeIngredients.empty()) return 0.0;
+
+    std::vector<std::string> userLower;
+    for (const auto& u : userIngredients) userLower.push_back(toLower(u));
+
+    // A short list of near-universal seasonings/staples that don't count
+    // against coverage -- almost every kitchen has these, and requiring
+    // a user to explicitly type "salt" and "water" for every recipe
+    // would be an unreasonable bar for "uses only my ingredients".
+    static const std::vector<std::string> impliedStaples = {
+        "salt", "water", "black pepper", "pepper"
+    };
+
+    int covered = 0;
+    for (const auto& recipeIng : recipeIngredients) {
+        std::string r = toLower(recipeIng);
+        bool isStaple = std::any_of(impliedStaples.begin(), impliedStaples.end(), [&](const std::string& s) {
+            return r.find(s) != std::string::npos;
+        });
+        bool found = isStaple || std::any_of(userLower.begin(), userLower.end(), [&](const std::string& u) {
+            return r.find(u) != std::string::npos || u.find(r) != std::string::npos;
+        });
+        if (found) covered++;
+    }
+    return (static_cast<double>(covered) / recipeIngredients.size()) * 100.0;
+}
+
 double RecipeMatcher::scoreCuisine(const std::string& userCuisine, const std::string& recipeCuisine) const {
     if (toLower(userCuisine) == toLower(recipeCuisine)) return 100.0;
     if (toLower(userCuisine) == "other") return 60.0; // user has no strong preference
@@ -47,13 +81,6 @@ double RecipeMatcher::scoreDiet(const std::string& userDiet, const std::string& 
     // Vegan recipes automatically satisfy a vegetarian request, etc.
     if (u == "vegetarian" && r == "vegan") return 90.0;
     return 0.0;
-}
-
-double RecipeMatcher::scoreCookingTime(int userTime, int recipeTime) const {
-    if (recipeTime <= userTime) return 100.0;
-    int over = recipeTime - userTime;
-    double penalty = (static_cast<double>(over) / std::max(userTime, 1)) * 100.0;
-    return std::max(0.0, 100.0 - penalty);
 }
 
 double RecipeMatcher::scoreDifficulty(const std::string& userDifficulty, const std::string& recipeDifficulty) const {
@@ -83,9 +110,10 @@ std::vector<MatchResult> RecipeMatcher::findMatches(const RecipePreferences& pre
         MatchResult mr;
         mr.recipeJson = recipe;
         mr.ingredientScore = scoreIngredients(preferences.getIngredients(), recipeIngredients);
+        mr.ingredientCoverage = computeIngredientCoverage(preferences.getIngredients(), recipeIngredients);
         mr.cuisineScore = scoreCuisine(preferences.getCuisine(), recipe.value("cuisine", ""));
         mr.dietScore = scoreDiet(preferences.getDietaryPreference(), recipe.value("dietaryPreference", "No Preference"));
-        mr.timeScore = scoreCookingTime(preferences.getCookingTime(), recipe.value("cookingTime", 30));
+        mr.timeScore = ScoringUtil::cookingTimeComplianceScore(preferences.getCookingTime(), recipe.value("cookingTime", 30));
         mr.difficultyScore = scoreDifficulty(preferences.getDifficulty(), recipe.value("difficulty", "Medium"));
 
         // Weighted rubric: ingredients 50%, cuisine 20%, diet 15%, time 10%, difficulty 5%.

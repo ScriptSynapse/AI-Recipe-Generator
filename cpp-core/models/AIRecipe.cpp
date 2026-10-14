@@ -36,7 +36,12 @@ void AIRecipe::generateInstructions() {
 }
 
 std::string AIRecipe::getSourceLabel() const {
-    return usedFallback ? "AI Generated Recipe (Offline Fallback)" : "AI Generated Recipe";
+    // The user-facing label is always just "AI Generated Recipe" --
+    // whether the offline fallback was used vs. the real AI provider is
+    // an internal implementation detail, not something worth surfacing
+    // in the UI. It's still available via usedFallback()/toJson() for
+    // debugging/logging.
+    return "AI Generated Recipe";
 }
 
 json AIRecipe::toJson() const {

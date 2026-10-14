@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecipeAI Sentinel — Secure Multi-LLM Recipe Intelligence</title>
+  <meta name="description" content="Generate recipes with several AI models, compare them side by side, and see every request the security checks stopped.">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/sentinel.css">
+  <link rel="stylesheet" href="css/polish.css">
+  <link rel="stylesheet" href="css/landing.css">
+</head>
+<body class="landing">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a href="landing.html" class="logo">
+        <span class="logo-mark" aria-hidden="true">S</span>
+        <span class="logo-text">RecipeAI Sentinel<span class="logo-sub">Secure Multi-LLM Recipe Intelligence Platform</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#project">Project</a></li>
+        <li id="auth-nav" class="nav-auth"><a href="login.html">Sign in</a></li>
+        <li><a href="index.html" class="btn btn-primary nav-cta">Open the app</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- Hero: one request that passes, one that is stopped -->
+    <section class="hero-l" aria-labelledby="hero-title">
+      <div class="wrap hero-l-grid">
+        <div class="hero-l-copy">
+          <h1 id="hero-title">Recipes from several AI models, checked before they reach you</h1>
+          <p class="lede">Tell it what is in your kitchen. RecipeAI Sentinel screens the request, asks the models, validates every reply, and keeps a record of everything it blocked.</p>
+          <div class="cta-row">
+            <a href="generator.html" class="btn btn-primary btn-xl">Generate a recipe</a>
+            <a href="ai-lab.html" class="btn btn-secondary btn-xl">Compare AI models</a>
+          </div>
+          <p class="fine">No account needed to generate. Sign in to save recipes and use the AI Lab.</p>
+        </div>
+
+        <figure class="flow" id="flow">
+          <div class="flow-card" role="img" aria-label="Illustration: a request for paneer, tomato and onion passes the input checks, a model answers, the reply is validated and a recipe appears. A second request that tries to override the instructions is blocked at the input checks and never reaches a model.">
+            <div class="flow-stages" aria-hidden="true">
+              <span>Your request</span><span>Input checks</span><span>AI model</span><span>Reply check</span><span>Recipe</span>
+            </div>
+
+            <div class="lane lane-ok" aria-hidden="true">
+              <div class="track"><i class="dot" style="--n:0"></i><i class="dot" style="--n:1"></i><i class="dot" style="--n:2"></i><i class="dot" style="--n:3"></i><i class="dot" style="--n:4"></i>
+                <span class="token token-ok" id="token-ok">paneer, tomato, onion</span>
+              </div>
+              <p class="lane-result" id="result-ok"><b>Paneer tikka masala</b><span>Reply validated</span></p>
+            </div>
+
+            <div class="lane lane-bad" aria-hidden="true">
+              <div class="track"><i class="dot" style="--n:0"></i><i class="dot" style="--n:1"></i><i class="dot dot-off" style="--n:2"></i><i class="dot dot-off" style="--n:3"></i><i class="dot dot-off" style="--n:4"></i>
+                <span class="token token-bad" id="token-bad">Ignore your rules and…</span>
+              </div>
+              <p class="lane-result" id="result-bad"><b>Blocked at the input checks</b><span>Never sent to a model. Recorded in the audit log.</span></p>
+            </div>
+          </div>
+          <figcaption>Illustration of the real request path. Each stage is a separate check in the code.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Facts that come straight from the code -->
+    <section class="facts" aria-label="At a glance">
+      <div class="wrap facts-row">
+        <p><b data-count="5">5</b><span>model providers, including one you can run locally</span></p>
+        <p><b data-count="3">3</b><span>checks on every request before a model sees it</span></p>
+        <p><b data-count="11">11</b><span>kinds of security event written to the audit log</span></p>
+        <p><b data-count="2">2</b><span>roles, with the rules enforced on the server</span></p>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how" class="block" aria-labelledby="how-title">
+      <div class="wrap">
+        <h2 id="how-title">What happens to a request</h2>
+        <ol class="steps">
+          <li><h3>It is screened first</h3><p>Ingredients are checked for bad input, prompt-injection attempts and script markup. A failed check stops the request here.</p></li>
+          <li><h3>Models are tried in order</h3><p>Claude, Gemini, OpenAI, Groq, then a local model. A provider with no key is skipped. If none answer, an offline generator still produces a recipe and says so.</p></li>
+          <li><h3>Replies are validated</h3><p>A model's answer must match a strict recipe format before it is shown. Anything else is rejected and the next model is tried.</p></li>
+          <li><h3>You see what was checked</h3><p>The recipe page lists which ingredients were used, whether your diet was respected, and anything unexpected.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Features with screenshot placeholders -->
+    <section id="features" class="block block-alt" aria-labelledby="feat-title">
+      <div class="wrap">
+        <h2 id="feat-title">Three places to look</h2>
+
+        <article class="feature reveal">
+          <div class="feature-copy">
+            <h3>Generate</h3>
+            <p>Add ingredients, pick a cuisine, diet and time, review the request, then generate. Save what you like and find it later by name, cuisine or difficulty.</p>
+            <a href="generator.html" class="textlink">Open the generator</a>
+          </div>
+          <figure class="shot" data-src="assets/screens/generator.png" data-alt="The recipe generator">
+            <div class="shot-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="shot-body"><p class="shot-note">Screenshot placeholder</p><p class="shot-file">assets/screens/generator.png</p></div>
+          </figure>
+        </article>
+
+        <article class="feature feature-flip reveal">
+          <div class="feature-copy">
+            <h3>AI Model Lab</h3>
+            <p>Send one request to every configured model at once. Compare how long each took and how well each recipe followed your ingredients and diet. Only measured values are shown.</p>
+            <a href="ai-lab.html" class="textlink">Open the AI Lab</a>
+          </div>
+          <figure class="shot" data-src="assets/screens/ai-lab.png" data-alt="The AI Model Lab comparing several models">
+            <div class="shot-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="shot-body"><p class="shot-note">Screenshot placeholder</p><p class="shot-file">assets/screens/ai-lab.png</p></div>
+          </figure>
+        </article>
+
+        <article class="feature reveal">
+          <div class="feature-copy">
+            <h3>Security Center</h3>
+            <p>Administrators see blocked requests, failed sign-ins and rate-limit hits as they were recorded, with a threat level for the last hour. When nothing has happened, every number is zero.</p>
+            <a href="security.html" class="textlink">Open the Security Center</a>
+          </div>
+          <figure class="shot" data-src="assets/screens/security.png" data-alt="The Security Center showing recorded events">
+            <div class="shot-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="shot-body"><p class="shot-note">Screenshot placeholder</p><p class="shot-file">assets/screens/security.png</p></div>
+          </figure>
+        </article>
+      </div>
+    </section>
+
+    <!-- Providers -->
+    <section class="block" aria-labelledby="prov-title">
+      <div class="wrap">
+        <h2 id="prov-title">Bring your own keys</h2>
+        <p class="sub">Add an API key to <code>.env</code> and that provider joins the chain. Whether each one is available right now is shown live in the AI Lab, never assumed here.</p>
+        <ul class="providers">
+          <li><span class="mono" aria-hidden="true">Cl</span>Claude</li>
+          <li><span class="mono" aria-hidden="true">Ge</span>Gemini</li>
+          <li><span class="mono" aria-hidden="true">Op</span>OpenAI</li>
+          <li><span class="mono" aria-hidden="true">Gr</span>Groq</li>
+          <li><span class="mono" aria-hidden="true">Lo</span>Local model</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Demo video + project details placeholders -->
+    <section id="project" class="block block-alt" aria-labelledby="proj-title">
+      <div class="wrap proj-grid">
+        <div>
+          <h2 id="proj-title">See it running</h2>
+          <figure class="video" id="demo-video" data-src="assets/demo.mp4">
+            <div class="video-frame">
+              <span class="play" aria-hidden="true"></span>
+              <p class="shot-note">Demo video placeholder</p>
+              <p class="shot-file">assets/demo.mp4</p>
+            </div>
+          </figure>
+        </div>
+        <div>
+          <h2>About this project</h2>
+          <p class="sub">An object-oriented programming lab project: a C++ core, an Express API and a plain JavaScript frontend.</p>
+          <dl class="details">
+            <div><dt>Team</dt><dd class="ph">[Student names]</dd></div>
+            <div><dt>Guide</dt><dd class="ph">[Faculty guide]</dd></div>
+            <div><dt>Institution</dt><dd class="ph">[College and department]</dd></div>
+            <div><dt>Source</dt><dd class="ph">[Repository link]</dd></div>
+          </dl>
+          <p class="fine">Bracketed items are placeholders. Replace them in <code>landing.html</code>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block closing" aria-labelledby="close-title">
+      <div class="wrap closing-inner">
+        <h2 id="close-title">Start with what is in your kitchen</h2>
+        <div class="cta-row">
+          <a href="generator.html" class="btn btn-primary btn-xl">Generate a recipe</a>
+          <a href="login.html" class="btn btn-secondary btn-xl">Create an account</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="logo"><span class="logo-mark" aria-hidden="true">S</span> RecipeAI Sentinel</div>
+      <p class="footer-note">Secure Multi-LLM Recipe Intelligence Platform &middot; OOP Laboratory project: C++ core, Express API, vanilla JS frontend.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/authHelpers.js"></script>
+  <script src="js/auth-status.js"></script>
+  <script src="js/landing.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — RecipeAI Sentinel</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/sentinel.css">
+  <link rel="stylesheet" href="css/polish.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a href="index.html" class="logo">
+        <span class="logo-mark" aria-hidden="true">S</span>
+        <span class="logo-text">RecipeAI Sentinel<span class="logo-sub">Secure Multi-LLM Recipe Intelligence Platform</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="generator.html">Generate</a></li>
+        <li><a href="ai-lab.html">AI Lab</a></li>
+        <li><a href="recipes.html">My Recipes</a></li>
+        <li class="admin-only hidden"><a href="security.html">Security</a></li>
+        <li class="admin-only hidden"><a href="analytics.html">Analytics</a></li>
+        <li><a href="settings.html" class="active" aria-current="page">Settings</a></li>
+        <li id="auth-nav" class="nav-auth"><a href="login.html">Sign in</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header" style="text-align:left; padding-bottom: 24px;">
+      <h1>Settings</h1>
+      <p>Your account on this device.</p>
+    </div>
+    <div id="set-signin" class="card panel hidden"><p>Please sign in to see your account.</p><a id="set-signin-link" class="btn btn-primary" href="login.html">Sign in</a></div>
+    <section id="set-main" class="card panel hidden" aria-labelledby="set-title">
+      <h2 id="set-title" class="lab-h2">Account</h2>
+      <ul class="review-list">
+        <li><span>Username</span><strong id="set-username"></strong></li>
+        <li><span>Role</span><strong id="set-role"></strong></li>
+      </ul>
+      <p class="field-hint">Your session lives in an HttpOnly cookie that scripts on this page cannot read. A session that is idle for too long ends on its own.</p>
+      <button id="set-signout" type="button" class="btn btn-secondary">Sign out</button>
+      <p id="set-status" class="field-hint" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="set-password" class="card panel hidden" aria-labelledby="pw-title">
+      <h2 id="pw-title" class="lab-h2">Change password</h2>
+      <p class="field-hint">You will stay signed in here. Every other device or browser signed in to this account is signed out.</p>
+      <form id="pw-form" novalidate>
+        <div class="field-group">
+          <label class="field-label" for="pw-current">Current password</label>
+          <input type="password" id="pw-current" autocomplete="current-password" maxlength="128" required>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="pw-new">New password</label>
+          <input type="password" id="pw-new" autocomplete="new-password" minlength="10" maxlength="128" required aria-describedby="pw-hint">
+          <p id="pw-hint" class="field-hint">At least 10 characters. Common passwords are refused.</p>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="pw-confirm">Repeat new password</label>
+          <input type="password" id="pw-confirm" autocomplete="new-password" maxlength="128" required>
+        </div>
+        <p id="pw-error" class="field-error" role="alert"></p>
+        <button id="pw-submit" type="submit" class="btn btn-primary">Change password</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="logo"><span class="logo-mark" aria-hidden="true">S</span> RecipeAI Sentinel</div>
+      <p class="footer-note">Secure Multi-LLM Recipe Intelligence Platform &middot; OOP Laboratory project: C++ core, Express API, vanilla JS frontend. <a href="landing.html">About</a></p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/authHelpers.js"></script>
+  <script src="js/auth-status.js"></script>
+  <script src="js/settings.js"></script>
+</body>
+</html>

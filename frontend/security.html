@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Center — RecipeAI Sentinel</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/sentinel.css">
+  <link rel="stylesheet" href="css/polish.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a href="index.html" class="logo">
+        <span class="logo-mark" aria-hidden="true">S</span>
+        <span class="logo-text">RecipeAI Sentinel<span class="logo-sub">Secure Multi-LLM Recipe Intelligence Platform</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="generator.html">Generate</a></li>
+        <li><a href="ai-lab.html">AI Lab</a></li>
+        <li><a href="recipes.html">My Recipes</a></li>
+        <li class="admin-only hidden"><a href="security.html" class="active" aria-current="page">Security</a></li>
+        <li class="admin-only hidden"><a href="analytics.html">Analytics</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li id="auth-nav" class="nav-auth"><a href="login.html">Sign in</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header" style="text-align:left; padding-bottom: 24px;">
+      <h1>Security Center</h1>
+      <p>Everything here is counted from the audit log — real events only. With nothing recorded, every figure is zero.</p>
+    </div>
+
+    <div id="sec-signin" class="card panel hidden">
+      <p>The Security Center is available to administrators. Please sign in.</p>
+      <a id="sec-signin-link" class="btn btn-primary" href="login.html">Sign in</a>
+    </div>
+
+    <div id="sec-denied" class="card panel hidden" role="alert">
+      <p>Your account does not have access to the Security Center.</p>
+    </div>
+
+    <div id="sec-main" class="hidden">
+      <div class="card panel sec-toolbar">
+        <div class="field-group">
+          <label class="field-label" for="sec-window">Period</label>
+          <select id="sec-window"></select>
+        </div>
+        <button id="sec-refresh" type="button" class="btn btn-secondary">Refresh</button>
+        <div id="sec-status" class="field-hint" role="status" aria-live="polite"></div>
+      </div>
+
+      <section class="card panel" aria-labelledby="sec-threat-title">
+        <h2 id="sec-threat-title" class="lab-h2">Threat level</h2>
+        <div id="sec-threat" class="sec-threat"></div>
+        <p id="sec-status-line" class="field-hint"></p>
+        <ul id="sec-notes" class="lab-warnings"></ul>
+      </section>
+
+      <section aria-labelledby="sec-cards-title">
+        <h2 id="sec-cards-title" class="lab-h2">Summary</h2>
+        <div id="sec-cards" class="sec-cards"></div>
+      </section>
+
+      <section class="card panel" aria-labelledby="sec-series-title">
+        <h2 id="sec-series-title" class="lab-h2">Activity</h2>
+        <div id="sec-series" class="sec-series" role="img" aria-label="Events over time"></div>
+        <p class="field-hint"><span class="sec-key sec-key-total"></span> all events &nbsp; <span class="sec-key sec-key-blocked"></span> blocked or denied</p>
+        <p id="sec-series-summary" class="field-hint"></p>
+      </section>
+
+      <section class="card panel" aria-labelledby="sec-types-title">
+        <h2 id="sec-types-title" class="lab-h2">Events by type</h2>
+        <div id="sec-types"></div>
+      </section>
+
+      <section class="card panel" aria-labelledby="sec-events-title">
+        <h2 id="sec-events-title" class="lab-h2">Recent security events</h2>
+        <div id="sec-events" class="lab-table-wrap"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="logo"><span class="logo-mark" aria-hidden="true">S</span> RecipeAI Sentinel</div>
+      <p class="footer-note">Secure Multi-LLM Recipe Intelligence Platform &middot; OOP Laboratory project: C++ core, Express API, vanilla JS frontend. <a href="landing.html">About</a></p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/authHelpers.js"></script>
+  <script src="js/auth-status.js"></script>
+  <script src="js/securityModel.js"></script>
+  <script src="js/security.js"></script>
+</body>
+</html>

@@ -1,22 +1,49 @@
 #include "AIGenerator.h"
 #include "../models/AIRecipe.h"
-#include <cstdlib>
+#include "RecipeTemplateEngine.h"
+#include "../ai/LLMProviderFactory.h"
+#include "../ai/ModelRouter.h"
+#include "../ai/http/CurlHttpClient.h"
+#include "../validation/AIOutputValidator.h"
+#include "../security/events/SecurityEventFactory.h"
 #include <sstream>
 #include <random>
 #include <algorithm>
-#include <curl/curl.h>
 #include <iostream>
 
-AIGenerator::AIGenerator() : model("claude-sonnet-4-6") {
-    const char* key = std::getenv("ANTHROPIC_API_KEY");
-    if (key != nullptr) apiKey = std::string(key);
+// Default: a ModelRouter over every configured provider, in factory order
+// (claude -> gemini -> openai -> groq -> local; Phase 21 failover chain).
+// A provider with no key configured is skipped automatically (isAvailable()
+// == false), so this is a strict superset of the pre-Phase-C behavior: with
+// only ANTHROPIC_API_KEY set, it behaves exactly as before (tries Claude,
+// falls through to the offline template on any failure). ModelRouter IS-A
+// LLMProvider, so no other change to AIGenerator was needed for this.
+AIGenerator::AIGenerator()
+    : provider(ModelRouter::buildDefaultChain(std::make_shared<CurlHttpClient>())) {}
+
+AIGenerator::AIGenerator(std::unique_ptr<LLMProvider> injectedProvider)
+    : provider(std::move(injectedProvider)) {}
+
+void AIGenerator::setEventManager(SecurityEventManager* manager) {
+    events = manager;
+    if (provider) provider->setEventManager(manager);
 }
 
 bool AIGenerator::hasApiKey() const {
-    return !apiKey.empty();
+    return provider && provider->isAvailable();
 }
 
-std::string AIGenerator::buildPrompt(const RecipePreferences& preferences) const {
+std::string AIGenerator::getModel() const {
+    return provider ? provider->getModelName() : "";
+}
+
+std::vector<std::pair<std::string, std::string>> AIGenerator::getProviderStatuses() const {
+    if (!provider) return {};
+    if (auto* router = dynamic_cast<ModelRouter*>(provider.get())) return router->chainStatuses();
+    return {{provider->getProviderName(), toString(provider->getStatus())}};
+}
+
+std::string AIGenerator::buildPrompt(const RecipePreferences& preferences) {
     std::ostringstream prompt;
     prompt << "You are a professional recipe developer. Create ONE original recipe using the "
            << "following constraints and respond with ONLY a single JSON object, no markdown "
@@ -44,80 +71,30 @@ std::string AIGenerator::buildPrompt(const RecipePreferences& preferences) const
            << "\n- Maximum cooking time: " << preferences.getCookingTime() << " minutes"
            << "\n- Difficulty: " << preferences.getDifficulty()
            << "\n- Servings: " << preferences.getServings()
-           << "\n\nUse the listed ingredients as the base of the dish, adding a small number of "
-           << "common pantry staples only if necessary. Respect the dietary preference strictly.";
+           << "\n\nSTRICT RULE: use ONLY the ingredients listed above in the \"ingredients\" array "
+           << "of your response -- do not add any ingredient the user did not list, including "
+           << "extra vegetables, proteins, dairy, sauces, or garnishes. The only exceptions are "
+           << "salt, black pepper, and water, which may be used for seasoning/cooking even though "
+           << "they weren't listed, since almost every kitchen already has them. Do not invent a "
+           << "need for oil, butter, or any other ingredient beyond those two exceptions -- if the "
+           << "dish would normally need something else, choose a preparation method or instruction "
+           << "that works without it instead. Respect the dietary preference strictly.";
     return prompt.str();
 }
 
-// libcurl write-callback: appends received bytes into a std::string buffer.
-static size_t curlWriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
-    size_t total = size * nmemb;
-    static_cast<std::string*>(userp)->append(static_cast<char*>(contents), total);
-    return total;
-}
-
-std::unique_ptr<Recipe> AIGenerator::callRealProvider(const RecipePreferences& preferences) {
-    CURL* curl = curl_easy_init();
-    if (!curl) throw std::runtime_error("Failed to initialize HTTP client.");
-
-    std::string prompt = buildPrompt(preferences);
-
-    json requestBody = {
-        {"model", model},
-        {"max_tokens", 1500},
-        {"messages", json::array({
-            json{{"role", "user"}, {"content", prompt}}
-        })}
-    };
-    std::string requestStr = requestBody.dump();
-
-    std::string responseBuffer;
-    struct curl_slist* headers = nullptr;
-    headers = curl_slist_append(headers, "content-type: application/json");
-    headers = curl_slist_append(headers, ("x-api-key: " + apiKey).c_str());
-    headers = curl_slist_append(headers, "anthropic-version: 2023-06-01");
-
-    curl_easy_setopt(curl, CURLOPT_URL, "https://api.anthropic.com/v1/messages");
-    curl_easy_setopt(curl, CURLOPT_POST, 1L);
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, requestStr.c_str());
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curlWriteCallback);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseBuffer);
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
-
-    CURLcode res = curl_easy_perform(curl);
-    long httpCode = 0;
-    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
-
-    curl_slist_free_all(headers);
-    curl_easy_cleanup(curl);
-
-    if (res != CURLE_OK) {
-        throw std::runtime_error(std::string("AI request failed: ") + curl_easy_strerror(res));
-    }
-    if (httpCode < 200 || httpCode >= 300) {
-        throw std::runtime_error("AI provider returned HTTP " + std::to_string(httpCode) + ": " + responseBuffer);
-    }
-
-    json responseJson = json::parse(responseBuffer);
-    if (!responseJson.contains("content") || !responseJson["content"].is_array() || responseJson["content"].empty()) {
-        throw std::runtime_error("AI provider response missing content.");
-    }
-
-    std::string text = responseJson["content"][0].value("text", "");
-    if (text.empty()) throw std::runtime_error("AI provider returned empty text.");
-
-    // Strip markdown code fences defensively in case the model adds them.
-    size_t fenceStart = text.find("```");
-    if (fenceStart != std::string::npos) {
-        size_t contentStart = text.find('\n', fenceStart);
-        size_t fenceEnd = text.rfind("```");
-        if (contentStart != std::string::npos && fenceEnd != std::string::npos && fenceEnd > contentStart) {
-            text = text.substr(contentStart + 1, fenceEnd - contentStart - 1);
-        }
-    }
-
-    json recipeJson = json::parse(text);
+std::unique_ptr<Recipe> AIGenerator::parseRecipeResponse(std::string text,
+                                                         const RecipePreferences& preferences,
+                                                         const std::string& providerLabel) {
+    // Phase G: never blindly trust an LLM response. AIOutputValidator
+    // strips any markdown fence, parses the JSON, and checks it against
+    // the exact schema buildPrompt() asked for (required fields, correct
+    // types, sane ranges, no unexpected fields). It throws
+    // AIOutputValidationException -- a std::exception -- on any problem,
+    // which generateRecipe()'s existing catch-all turns into a clean
+    // fallback to the offline generator, exactly like a provider/network
+    // failure. Only JSON that has already passed every check reaches the
+    // construction logic below.
+    json recipeJson = AIOutputValidator::validateAndParse(text);
 
     std::vector<Ingredient> ingredients;
     for (const auto& ij : recipeJson.value("ingredients", json::array())) {
@@ -147,7 +124,7 @@ std::unique_ptr<Recipe> AIGenerator::callRealProvider(const RecipePreferences& p
         recipeJson.value("difficulty", preferences.getDifficulty()),
         preferences.getServings(),
         nutrition,
-        "anthropic-claude",
+        providerLabel,
         false
     );
 
@@ -167,44 +144,31 @@ std::unique_ptr<Recipe> AIGenerator::callRealProvider(const RecipePreferences& p
 std::unique_ptr<Recipe> AIGenerator::callFallbackProvider(const RecipePreferences& preferences) {
     const auto& userIngredients = preferences.getIngredients();
 
-    std::string mainIngredient = userIngredients.empty() ? "seasonal vegetables" : userIngredients[0];
-    std::string title = preferences.getCuisine() + " Style " + mainIngredient + " " + preferences.getMealType();
-    // Capitalize first letter of the title for presentation.
-    if (!title.empty()) title[0] = static_cast<char>(std::toupper(title[0]));
+    // Deterministic-but-varied RNG, shared with RecipeTemplateEngine so
+    // both the calorie estimate and any future phrasing variation stay
+    // in sync across a single fallback generation call.
+    std::random_device rd;
+    std::mt19937 gen(rd());
 
+    // RecipeTemplateEngine classifies the actual ingredients (protein,
+    // vegetable, grain, dairy, sweet, liquid, ...) and the dish context
+    // (dessert / breakfast / salad / stir-fry / curry-style simmer /
+    // general) to build a title and instruction sequence that actually
+    // fits the dish being made, instead of one fixed template reused
+    // for every request regardless of what's in it.
+    RecipeTemplateEngine::GeneratedContent generated = RecipeTemplateEngine::generate(preferences, gen);
+
+    // STRICT INGREDIENTS ONLY: the recipe's ingredient list is exactly
+    // what the user provided, scaled to servings -- nothing added. Salt,
+    // pepper, and water are allowed in the *instructions* as seasoning
+    // steps (almost every kitchen has them) but are deliberately NOT
+    // added as extra ingredient-list entries, so what's shown to the
+    // user always matches what they said they have.
     std::vector<Ingredient> ingredients;
     for (const auto& userIng : userIngredients) {
         ingredients.emplace_back(userIng, 1.0 * preferences.getServings() / 2.0, "cup");
     }
-    // A handful of generic pantry staples so the recipe reads as complete.
-    ingredients.emplace_back("cooking oil", 1.0, "tbsp");
-    ingredients.emplace_back("salt", 0.5, "tsp");
-    ingredients.emplace_back("black pepper", 0.25, "tsp");
-    if (preferences.getDietaryPreference() != "Vegan" && preferences.getDietaryPreference() != "Dairy Free") {
-        ingredients.emplace_back("butter", 1.0, "tbsp");
-    }
 
-    std::ostringstream ingredientList;
-    for (size_t i = 0; i < userIngredients.size(); ++i) {
-        ingredientList << userIngredients[i];
-        if (i + 2 < userIngredients.size()) ingredientList << ", ";
-        else if (i + 2 == userIngredients.size()) ingredientList << " and ";
-    }
-
-    std::vector<std::string> instructions = {
-        "Prep all ingredients: wash, peel, and chop " + ingredientList.str() + " into even, bite-sized pieces.",
-        "Heat the cooking oil in a pan over medium heat until shimmering.",
-        "Add the main ingredients and saute for 4-5 minutes, stirring occasionally.",
-        "Season with salt and black pepper, then adjust to taste with cuisine-appropriate spices for " + preferences.getCuisine() + " food.",
-        "Cover and cook until everything is tender, about " + std::to_string(std::max(5, preferences.getCookingTime() - 10)) + " minutes.",
-        "Taste, adjust seasoning, and plate for " + std::to_string(preferences.getServings()) + " serving(s).",
-        "Serve hot as a " + preferences.getMealType() + " dish."
-    };
-
-    // Deterministic-but-varied calorie estimate so "regenerate" visibly
-    // changes numbers even when using the offline fallback.
-    std::random_device rd;
-    std::mt19937 gen(rd());
     std::uniform_int_distribution<> calorieJitter(-40, 60);
     double baseCalories = 320.0 * preferences.getServings() + calorieJitter(gen);
 
@@ -217,12 +181,12 @@ std::unique_ptr<Recipe> AIGenerator::callFallbackProvider(const RecipePreference
 
     auto recipe = std::make_unique<AIRecipe>(
         "ai-fallback-" + std::to_string(gen()),
-        title,
+        generated.title,
         preferences.getCuisine(),
         preferences.getMealType(),
         preferences.getDietaryPreference(),
         ingredients,
-        instructions,
+        generated.instructions,
         preferences.getCookingTime(),
         preferences.getDifficulty(),
         preferences.getServings(),
@@ -240,13 +204,23 @@ std::unique_ptr<Recipe> AIGenerator::callFallbackProvider(const RecipePreference
 }
 
 std::unique_ptr<Recipe> AIGenerator::generateRecipe(const RecipePreferences& preferences) {
-    if (hasApiKey()) {
+    if (provider && provider->isAvailable()) {
         try {
-            return callRealProvider(preferences);
+            std::string text = provider->generate(buildPrompt(preferences));
+            return parseRecipeResponse(text, preferences, provider->getProviderName());
+        } catch (const AIOutputValidationException& e) {
+            // The provider answered, but not with a valid recipe. Report it
+            // (value-free: field names only) and fall back like any failure.
+            if (events) events->emit(SecurityEventFactory::aiOutputRejected(provider->getProviderName(), e.getIssues()));
+            std::cerr << "[AIGenerator] provider '" << provider->getProviderName()
+                      << "' response rejected, using fallback: " << e.what() << std::endl;
         } catch (const std::exception& e) {
-            // Never let a provider outage crash the app -- fall through
-            // to the local generator and keep serving the user.
-            std::cerr << "[AIGenerator] Real provider failed, using fallback: " << e.what() << std::endl;
+            // LLMException (missing key, timeout, rate limit, network,
+            // bad HTTP status, malformed body) or a parsing failure below
+            // -- every case degrades to the local generator; nothing
+            // escapes and the app never crashes because a provider is down.
+            std::cerr << "[AIGenerator] provider '" << provider->getProviderName()
+                      << "' failed, using fallback: " << e.what() << std::endl;
         }
     }
     return callFallbackProvider(preferences);

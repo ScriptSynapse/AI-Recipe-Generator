@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in — RecipeAI Sentinel</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/sentinel.css">
+  <link rel="stylesheet" href="css/polish.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a href="index.html" class="logo">
+        <span class="logo-mark" aria-hidden="true">S</span>
+        <span class="logo-text">RecipeAI Sentinel<span class="logo-sub">Secure Multi-LLM Recipe Intelligence Platform</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="generator.html">Generate</a></li>
+        <li><a href="ai-lab.html">AI Lab</a></li>
+        <li><a href="recipes.html">My Recipes</a></li>
+        <li class="admin-only hidden"><a href="security.html">Security</a></li>
+        <li class="admin-only hidden"><a href="analytics.html">Analytics</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li id="auth-nav" class="nav-auth"><a href="login.html">Sign in</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>Sign in</h1>
+      <p>Generating and customizing recipes works without an account. Sign in to save recipes and see them again later.</p>
+    </div>
+
+    <div id="auth-error" class="error-banner" role="alert"></div>
+
+    <div class="auth-grid">
+      <form id="login-form" class="card form-card" aria-labelledby="login-heading">
+        <h2 id="login-heading">Sign in</h2>
+        <div class="field-group">
+          <label class="field-label" for="login-username">Username</label>
+          <input type="text" id="login-username" name="username" autocomplete="username" required maxlength="64">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="login-password">Password</label>
+          <input type="password" id="login-password" name="password" autocomplete="current-password" required maxlength="128">
+        </div>
+        <button type="submit" id="login-submit" class="btn btn-primary btn-block">Sign in</button>
+      </form>
+
+      <form id="register-form" class="card form-card" aria-labelledby="register-heading">
+        <h2 id="register-heading">Create an account</h2>
+        <div class="field-group">
+          <label class="field-label" for="register-username">Username</label>
+          <input type="text" id="register-username" name="username" autocomplete="username" required minlength="3" maxlength="32"
+                 aria-describedby="register-username-hint">
+          <p id="register-username-hint" class="field-hint">3–32 characters: letters, numbers, dot, underscore or hyphen.</p>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="register-password">Password</label>
+          <input type="password" id="register-password" name="password" autocomplete="new-password" required minlength="10" maxlength="128"
+                 aria-describedby="register-password-hint">
+          <p id="register-password-hint" class="field-hint">At least 10 characters. A few random words make a strong, memorable password.</p>
+        </div>
+        <button type="submit" id="register-submit" class="btn btn-secondary btn-block">Create account</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/authHelpers.js"></script>
+  <script src="js/auth-status.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

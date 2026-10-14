@@ -1,0 +1,137 @@
+/* ===========================================================================
+   RecipeAI Sentinel theme -- loaded AFTER style.css and responsive.css.
+   Dark, professional SaaS look: it re-points the design tokens defined in
+   style.css and overrides the few hard-coded light tints, so every page
+   (including ones not touched in this phase) picks it up. No glow, no
+   terminal effects: flat surfaces, thin borders, one blue accent.
+   =========================================================================== */
+:root {
+  --color-paper: #0E131F;
+  --color-paper-dim: #121929;
+  --color-card: #171E2E;
+  --color-ink: #E7EBF3;
+  --color-ink-soft: #AEB7C9;
+  --color-ink-faint: #8A95AB;
+  --color-saffron: #6F8BFF;        /* accent (kept name: style.css uses it) */
+  --color-saffron-dark: #8DA3FF;
+  --color-basil: #6CC4B0;          /* success / ok */
+  --color-basil-light: #3D7F72;
+  --color-brick: #F28B82;          /* danger / blocked */
+  --color-line: #263049;
+  --color-line-strong: #36425F;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --radius-card: 14px;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 4px 10px rgba(0, 0, 0, 0.4), 0 16px 32px -14px rgba(0, 0, 0, 0.6);
+  --tint-ok: rgba(108, 196, 176, 0.12);
+  --tint-warn: rgba(228, 178, 90, 0.14);
+  --tint-bad: rgba(242, 139, 130, 0.13);
+  --tint-neutral: rgba(174, 183, 201, 0.10);
+  --color-warn: #E4B25A;
+  color-scheme: dark;
+}
+
+body { background-image: none; background: var(--color-paper); }
+h1, h2, h3, h4 { letter-spacing: -0.01em; }
+
+.site-header { background: rgba(14, 19, 31, 0.92); border-bottom: 1px solid var(--color-line); }
+.logo-mark { background: linear-gradient(145deg, #5B7CFA 0%, #3B55C4 100%); color: #fff; font-weight: 700; font-size: 1rem; }
+.logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+.logo-sub { font-size: 0.66rem; font-weight: 500; color: var(--color-ink-faint); letter-spacing: 0.02em; }
+
+.nav-links .admin-only.hidden { display: none; }
+.nav-links a { padding: 6px 2px; }
+.nav-links a.active { color: var(--color-ink); border-bottom: 2px solid var(--color-saffron); }
+
+.btn-primary { background: #4361EE; color: #fff; box-shadow: none; }
+.btn-primary:hover { background: #3A56D6; transform: none; box-shadow: none; }
+.btn-primary:active { transform: none; background: #2F49BD; }
+.btn-secondary { background: transparent; color: var(--color-ink); border: 1px solid var(--color-line-strong); }
+.btn-secondary:hover { background: var(--color-paper-dim); }
+.btn-danger:hover { background: var(--tint-bad); }
+
+input, select, textarea { background: var(--color-paper-dim); color: var(--color-ink); border-color: var(--color-line-strong); }
+input::placeholder { color: var(--color-ink-faint); }
+
+.chip-ingredient { background: var(--tint-neutral); color: var(--color-ink); border-color: var(--color-line-strong); }
+.chip-diet, .lab-status-success, .sec-tone-ok { background: var(--tint-ok); border-color: var(--color-basil-light); color: var(--color-basil); }
+.chip-source, .lab-status-skipped, .lab-status-baseline, .sec-tone-neutral { background: var(--tint-neutral); border-color: var(--color-line-strong); color: var(--color-ink-soft); }
+.chip-ai, .lab-status-failed, .lab-status-rejected, .sec-tone-bad { background: var(--tint-bad); border-color: var(--color-brick); color: var(--color-brick); }
+.sec-tone-warn { background: var(--tint-warn); border-color: var(--color-warn); color: var(--color-warn); }
+
+.cta-band p { color: var(--color-ink-soft); }
+.modal-backdrop { background: rgba(4, 7, 14, 0.7); }
+.error-banner, .toast { background: var(--tint-bad); }
+.hero { background: radial-gradient(1200px 400px at 20% -10%, rgba(76, 110, 245, 0.18), transparent 60%); }
+
+/* ---- shared building blocks ------------------------------------------- */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.stat-tile { padding: 16px 18px; }
+.stat-tile .stat-value { font-size: 1.9rem; font-weight: 700; line-height: 1.1; color: var(--color-ink); }
+.stat-tile .stat-label { color: var(--color-ink-soft); font-size: 0.88rem; }
+.stat-tile .stat-note { color: var(--color-ink-faint); font-size: 0.78rem; margin-top: 2px; }
+.dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-bottom: 24px; }
+.dash-grid .panel { margin: 0; }
+.dash-list { list-style: none; margin: 0; padding: 0; }
+.dash-list li { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--color-line); }
+.dash-list li:last-child { border-bottom: 0; }
+.dash-list a { font-weight: 600; }
+.dash-meta { color: var(--color-ink-faint); font-size: 0.85rem; }
+.dash-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; background: var(--color-ink-faint); }
+.dash-dot-ok { background: var(--color-basil); }
+.dash-dot-bad { background: var(--color-brick); }
+.dash-dot-warn { background: var(--color-warn); }
+.welcome { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+
+/* ---- wizard (generator) ------------------------------------------------ */
+.stepper { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; padding: 0; counter-reset: step; }
+.stepper li { counter-increment: step; display: flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid var(--color-line); border-radius: 999px; color: var(--color-ink-faint); font-size: 0.85rem; }
+.stepper li::before { content: counter(step); display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--color-line); color: var(--color-ink-soft); font-size: 0.75rem; font-weight: 700; }
+.stepper li.current { color: var(--color-ink); border-color: var(--color-saffron); }
+.stepper li.current::before { background: #4361EE; color: #fff; }
+.stepper li.done { color: var(--color-ink-soft); }
+.stepper li.done::before { content: "✓"; background: var(--tint-ok); color: var(--color-basil); }
+.wizard-step { display: none; }
+.wizard-step.active { display: block; }
+.wizard-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; }
+.strategy-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.strategy-option { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--color-line-strong); border-radius: 12px; cursor: pointer; }
+.strategy-option:focus-within { outline: 2.5px solid var(--color-saffron-dark); outline-offset: 2px; }
+.strategy-option input { margin-top: 4px; width: auto; }
+.strategy-option strong { display: block; color: var(--color-ink); }
+.strategy-option span { color: var(--color-ink-soft); font-size: 0.88rem; }
+.review-list { margin: 0 0 14px; padding-left: 0; list-style: none; }
+.review-list li { padding: 6px 0; border-bottom: 1px solid var(--color-line); display: flex; justify-content: space-between; gap: 12px; }
+.check-list { list-style: none; margin: 0; padding: 0; }
+.check-list li { padding: 6px 0; display: flex; gap: 10px; align-items: baseline; }
+.check-mark { font-weight: 700; width: 1.2em; text-align: center; }
+.check-pass .check-mark { color: var(--color-basil); }
+.check-warn .check-mark { color: var(--color-warn); }
+.check-na .check-mark { color: var(--color-ink-faint); }
+.check-detail { color: var(--color-ink-faint); font-size: 0.85rem; }
+
+@media (max-width: 720px) {
+  .nav-links { flex-wrap: wrap; gap: 4px 14px; }
+  .stepper li { font-size: 0.78rem; padding: 4px 10px; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+.nav { flex-wrap: wrap; gap: 10px 24px; }
+.nav-links { flex-wrap: wrap; gap: 6px 22px; }
+.dash-bar { background: var(--color-saffron); }
+.welcome h1 { font-size: 1.7rem; margin: 0 0 4px; }
+main.container > :first-child { margin-top: 24px; }
+.page-header[style*="text-align:left"] p { margin-left: 0; }
+
+/* ---- My Recipes toolbar, toasts, confirm dialog ------------------------- */
+.recipes-toolbar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 20px; }
+.toolbar-field { display: flex; flex-direction: column; gap: 4px; min-width: 130px; flex: 1 1 130px; }
+.toolbar-search { flex: 2 1 220px; }
+.toolbar-count { flex-basis: 100%; margin: 0; font-size: 0.85rem; color: var(--color-ink-soft); }
+.toast-region { position: fixed; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 8px; z-index: 200; max-width: min(360px, calc(100vw - 32px)); }
+.toast-item { padding: 12px 16px; border-radius: 10px; border: 1px solid var(--color-line-strong); background: var(--color-card); color: var(--color-ink); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); font-size: 0.9rem; animation: toast-in 0.15s ease-out; }
+.toast-success { border-color: var(--color-basil, #3a8f5c); }
+.toast-error { border-color: var(--color-brick, #c0392b); }
+.btn-danger-solid { background: var(--color-brick, #c0392b); border-color: var(--color-brick, #c0392b); color: #fff; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .toast-item { animation: none; } }
+.field-error { min-height: 1.2em; margin: 8px 0; font-size: 0.88rem; color: var(--color-brick, #c0392b); }

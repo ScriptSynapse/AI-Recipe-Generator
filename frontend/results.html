@@ -3,24 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Recipe — AI Recipe Generator</title>
+  <title>Recipe — RecipeAI Sentinel</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/sentinel.css">
+  <link rel="stylesheet" href="css/polish.css">
 </head>
 <body>
 
   <header class="site-header">
-    <nav class="nav">
+    <nav class="nav" aria-label="Main">
       <a href="index.html" class="logo">
-        <span class="logo-mark">🍳</span>
-        AI Recipe Generator
+        <span class="logo-mark" aria-hidden="true">S</span>
+        <span class="logo-text">RecipeAI Sentinel<span class="logo-sub">Secure Multi-LLM Recipe Intelligence Platform</span></span>
       </a>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="generator.html">Generate</a></li>
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="generator.html" class="active" aria-current="page">Generate</a></li>
+        <li><a href="ai-lab.html">AI Lab</a></li>
         <li><a href="recipes.html">My Recipes</a></li>
+        <li class="admin-only hidden"><a href="security.html">Security</a></li>
+        <li class="admin-only hidden"><a href="analytics.html">Analytics</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li id="auth-nav" class="nav-auth"><a href="login.html">Sign in</a></li>
       </ul>
-      <a href="generator.html" class="btn btn-secondary">Back to Generator</a>
     </nav>
   </header>
 
@@ -75,6 +81,22 @@
         </div>
       </div>
 
+      <div class="dash-grid" style="margin-bottom:24px;">
+        <section class="card panel" aria-labelledby="meta-title">
+          <h2 id="meta-title" class="lab-h2">Generation details</h2>
+          <ul id="meta-list" class="review-list"></ul>
+        </section>
+        <section id="safety-panel" class="card panel hidden" aria-labelledby="safety-title">
+          <h2 id="safety-title" class="lab-h2">AI safety check</h2>
+          <ul id="safety-list" class="check-list"></ul>
+          <p class="field-hint">Compares your ingredients with what the recipe uses. Warnings are information, not errors.</p>
+        </section>
+        <section id="pipeline-panel" class="card panel hidden" aria-labelledby="pipeline-title">
+          <h2 id="pipeline-title" class="lab-h2">Generation pipeline</h2>
+          <ul id="pipeline-list" class="check-list"></ul>
+        </section>
+      </div>
+
       <div class="result-columns">
         <!-- Ingredients + Nutrition -->
         <div>
@@ -127,6 +149,7 @@
           <button class="btn btn-secondary" id="action-healthier">Make Healthier</button>
           <button class="btn btn-secondary" id="action-substitute">Substitute Ingredient</button>
           <button class="btn btn-secondary" id="action-servings">Change Servings</button>
+          <button class="btn btn-secondary" id="action-compare">Compare With Another Model</button>
           <a href="generator.html" class="btn btn-ghost">Back to Generator</a>
         </div>
       </div>
@@ -135,8 +158,8 @@
 
   <footer class="site-footer">
     <div class="container footer-grid">
-      <div class="logo"><span class="logo-mark">🍳</span> AI Recipe Generator</div>
-      <p class="footer-note">Built as an OOP Laboratory project.</p>
+      <div class="logo"><span class="logo-mark" aria-hidden="true">S</span> RecipeAI Sentinel</div>
+      <p class="footer-note">Secure Multi-LLM Recipe Intelligence Platform &middot; OOP Laboratory project: C++ core, Express API, vanilla JS frontend. <a href="landing.html">About</a></p>
     </div>
   </footer>
 
@@ -171,6 +194,9 @@
   </div>
 
   <script src="js/api.js"></script>
+  <script src="js/authHelpers.js"></script>
+  <script src="js/auth-status.js"></script>
+  <script src="js/resultModel.js"></script>
   <script src="js/results.js"></script>
 </body>
 </html>

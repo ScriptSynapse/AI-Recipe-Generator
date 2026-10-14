@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Secrets -- never commit. Copy .env.example to .env locally.
+.env
+.env.*
+!.env.example
+
+# Compiled artifacts (rebuild with `npm run build:cpp`)
+cpp-core/recipe_engine
+cpp-core/recipe_engine.exe
+*.o
+*.exe
+
+# Runtime state / temp files written by the storage layer
+# (users.json holds password hashes; sessions.json holds session-token hashes)
+data/users.json
+data/sessions.json
+# the audit log holds client IPs and account activity
+data/security-audit.jsonl*
+*.lock/
+*.tmp
+test_*.json
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+*.log
+data/model-analytics.json
+data/usage.json

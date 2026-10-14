@@ -20,6 +20,30 @@ Or use the provided npm script from the project root:
 npm run test:cpp
 ```
 
+## Spec-to-test coverage matrix (Phases 27/28)
+
+| Area | Test(s) | Notes |
+|------|---------|-------|
+| Recipe construction (Builder) | `tests/test_recipe_builder.cpp` | `RecipeBuilder` validates before building; bad input raises `RECIPE_*` codes, which the API maps to HTTP 400 |
+| Ingredient consistency / non-food detection | `tests/test_ingredient_consistency.cpp`, `tests/node/engineConsistency.test.js` | The second file runs against the real engine binary |
+| Storage hardening and concurrency | `tests/test_storage_hardening.cpp` (HARD-08) | 8 threads, 3200 lock acquisitions; regression test for the `FileLock` EEXIST race |
+| Concurrent providers | `tests/test_model_comparator.cpp` under ThreadSanitizer (`tests/run_tsan.sh`) | No data races reported |
+| Results view (safety checks) | `tests/node/redesignFrontend.test.js` (RR-04) | Fake DOM; no real-browser script test of `results.js` |
+
+| My Recipes page | `tests/node/recipesPage.test.js` | Filters, sort, safe rendering, delete flow; also checked once in real Chromium with mocked API data |
+| Benchmark history | `tests/node/modelAnalytics.test.js` (MA-H*), `aiController.test.js` (AC-H*), `labFrontend.test.js` (LF-10..13) | Store query, validated filters, admin endpoint, history table and run comparison |
+| No markup injection in the frontend | `tests/node/sanitize.test.js` | Sweeps every `frontend/js` file for `innerHTML`/`outerHTML` assignment, `insertAdjacentHTML` and `document.write` |
+
+| Recipe payload security (save/customize) | `tests/node/recipePayloadSecurity.test.js` | Real engine: markup refused and audited, saved recipe rebuilt, over-nesting, no false positive on plain text |
+| Sessions and passwords | `tests/node/sessionSecurity.test.js` | Idle timeout, throttled activity writes, change password with session revocation, audit events, reserved-name timing, controller shape and throttle |
+
+### Known limits of the test setup
+
+- HTTP-level tests need Express (`npm install`). Where it is missing they are skipped, not passed. In the last sandbox run 76 of 412 Node tests were skipped, 336 passed and 0 failed.
+- The sandbox had no libcurl headers, so C++ suites were run against a stub. Run `bash tests/run_tests.sh` and `bash tests/run_tsan.sh` on a machine with libcurl to cover the real network path.
+- Nothing has been exercised with real provider API keys.
+- Rate limits and login throttling are in-memory and per process.
+
 ## Test case table (as required by the assignment spec)
 
 | Test | Input | Expected | Actual result |
@@ -97,3 +121,7 @@ with no `ANTHROPIC_API_KEY` set, so `TC10` specifically exercises the
 this is the code path graders are most likely to hit when running the
 project without a configured API key, and it is verified to never
 crash and always return a complete, well-formed recipe.
+
+## Landing page (`tests/node/landing.test.js`)
+
+LP-01 no inline scripts or handlers; LP-02 local links and assets exist; LP-03 placeholders labelled; LP-04 facts match provider files and audit event types; LP-05 no HTML-string sinks, reduced-motion blocks present; LP-06 polish.css linked on every page; LP-07 `/` serves the landing page.

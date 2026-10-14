@@ -1,0 +1,9 @@
+# RecipeAI Sentinel UI (Phase Q)
+
+- **Theme**: `frontend/css/sentinel.css` re-points the design tokens of `style.css` (dark, one blue accent, no glow). Key text/background pairs are checked for WCAG AA in `tests/node/redesignFrontend.test.js`.
+- **Layout**: `scripts/apply-layout.py` rewrites the shared header, footer, title and stylesheet links on every page (run it after adding a page). Security and Analytics links are `admin-only` (hidden until `auth-status.js` sees an ADMIN); the server enforces access regardless.
+- **Dashboard** (`index.html`): tiles come from `GET /api/usage/me` (own counters), `GET /api/recipes`, `GET /api/ai/models` and, for admins, `GET /api/security/stats`. A source that fails shows "—", never 0.
+- **Usage counters** (`backend/usage/UsageStore.js`): recorded only after a successful response. *Recipes generated* = successful generate/regenerate; *AI requests* = AI-sourced non-fallback recipes plus each model a Lab comparison actually called. Anonymous requests are not counted. Stored in `data/usage.json` (90 days per user).
+- **Guided generator**: Ingredients, Preferences, AI strategy, Security scan (review). "Automatic" calls `/api/recipes/generate`; Compare/Fastest/Best hand the request to the AI Lab (prefilled, never auto-run). The review lists what the browser checked and which server checks will run; it does not claim server checks passed before they run.
+- **Result page**: details and pipeline are derived from the response (`source`, `aiProvider`, `usedFallback`, `matchInfo`) plus the measured round trip; stages the response cannot prove are shown as not applicable. Saved recipes show details but no pipeline.
+- **Not in the generate API**: single-model selection and multi-model synthesis for normal generation. Model comparison lives in the AI Lab.
