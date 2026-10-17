@@ -521,3 +521,7 @@ Express-dependent HTTP tests, real provider calls and the real libcurl path have
 - The numbers in the facts row are checked against the code by `tests/node/landing.test.js`.
 
 The placeholder frames show illustrations from `frontend/assets/art/` (drawn as SVG in code, not screenshots), each captioned as an illustration. Real files at the paths above replace them automatically.
+
+## Hosting
+
+See `DEPLOY.md` (Render, with `Dockerfile` and `render.yaml`).

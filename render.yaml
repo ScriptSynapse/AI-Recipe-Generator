@@ -1,0 +1,31 @@
+# Render Blueprint. Persistent disks need a paid instance type (starter or above).
+services:
+  - type: web
+    name: recipeai-sentinel
+    runtime: docker
+    plan: starter
+    healthCheckPath: /
+    disk:
+      name: recipeai-data
+      mountPath: /app/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: TRUST_PROXY_HOPS
+        value: "1"
+      # Secrets: enter these in the Render dashboard (sync: false keeps them out of the repo).
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: BOOTSTRAP_ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
