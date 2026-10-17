@@ -519,3 +519,5 @@ Express-dependent HTTP tests, real provider calls and the real libcurl path have
 - `css/polish.css` is linked on every page: page-in, focus rings, skip link, button press, card hover, modal pop-in.
 - Placeholders (each is labelled on the page): replace by dropping files at `frontend/assets/screens/generator.png`, `ai-lab.png`, `security.png` and `frontend/assets/demo.mp4`. The placeholder swaps itself for the file when it loads. Edit the bracketed team, guide, institution and source lines in `landing.html`.
 - The numbers in the facts row are checked against the code by `tests/node/landing.test.js`.
+
+The placeholder frames show illustrations from `frontend/assets/art/` (drawn as SVG in code, not screenshots), each captioned as an illustration. Real files at the paths above replace them automatically.

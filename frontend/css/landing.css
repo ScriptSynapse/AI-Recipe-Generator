@@ -156,3 +156,9 @@
   .js-reveal .reveal { opacity: 1; transform: none; }
   .shot-body::after, .video-frame::after { animation: none; display: none; }
 }
+
+/* illustrated placeholders: the art fills the frame, a caption says it is not a real screenshot */
+.shot-body:has(.art), .video-frame:has(.art) { display: block; padding: 0; background: none; }
+.art { display: block; width: 100%; height: auto; }
+.shot-body .shot-file, .video-frame .shot-file { position: absolute; left: 12px; bottom: 10px; z-index: 1; padding: 3px 9px; border-radius: 999px; background: rgba(13, 18, 34, 0.82); border: 1px solid var(--color-line-strong); }
+.video-frame:has(.art) .play { display: none; }

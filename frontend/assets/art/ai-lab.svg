@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#141b30"/><stop offset="1" stop-color="#0d1222"/></linearGradient></defs><rect width="800" height="500" fill="url(#g)"/>
+<rect x="36" y="36" width="728" height="428" rx="14" fill="#18203a" stroke="#2b3556"/>
+<rect x="60" y="60" width="180" height="14" rx="7" fill="#e8ecf5"/>
+<g font-family="Inter,sans-serif" font-size="13" fill="#aeb7c9">
+<text x="60" y="124">Claude</text><rect x="150" y="110" width="440" height="18" rx="9" fill="#0f1527"/><rect x="150" y="110" width="300" height="18" rx="9" fill="#4560f0"/><rect x="620" y="108" width="110" height="22" rx="11" fill="#17332f" stroke="#6cc9a8"/>
+<text x="60" y="184">Gemini</text><rect x="150" y="170" width="440" height="18" rx="9" fill="#0f1527"/><rect x="150" y="170" width="230" height="18" rx="9" fill="#4560f0"/><rect x="620" y="168" width="110" height="22" rx="11" fill="#17332f" stroke="#6cc9a8"/>
+<text x="60" y="244">OpenAI</text><rect x="150" y="230" width="440" height="18" rx="9" fill="#0f1527"/><rect x="150" y="230" width="360" height="18" rx="9" fill="#4560f0"/><rect x="620" y="228" width="110" height="22" rx="11" fill="#35222a" stroke="#e8837a"/>
+<text x="60" y="304">Groq</text><rect x="150" y="290" width="440" height="18" rx="9" fill="#0f1527"/><rect x="150" y="290" width="120" height="18" rx="9" fill="#4560f0"/><rect x="620" y="288" width="110" height="22" rx="11" fill="#17332f" stroke="#6cc9a8"/>
+<text x="60" y="364">Local</text><rect x="150" y="350" width="440" height="18" rx="9" fill="#0f1527"/><rect x="150" y="350" width="400" height="18" rx="9" fill="#2b3556"/><rect x="620" y="348" width="110" height="22" rx="11" fill="#2b2a24" stroke="#f0b66b"/>
+</g>
+<g stroke="#2b3556"><line x1="60" y1="404" x2="740" y2="404"/></g>
+<rect x="60" y="424" width="260" height="8" rx="4" fill="#2b3556"/>
+</svg>

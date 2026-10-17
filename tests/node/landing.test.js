@@ -22,8 +22,9 @@ test('LP-02 local links and assets resolve to existing files', () => {
 });
 
 test('LP-03 placeholders are labelled and optional files are not required', () => {
-  assert.match(html, /Screenshot placeholder/);
-  assert.match(html, /Demo video placeholder/);
+  assert.match(html, /Illustration\. Replace with assets\/screens\/generator\.png/);
+  assert.match(html, /Illustration\. Replace with assets\/demo\.mp4/);
+  for (const a of ['generator', 'ai-lab', 'security']) assert.ok(html.includes('assets/art/' + a + '.svg'));
   for (const f of ['generator.png', 'ai-lab.png', 'security.png']) assert.ok(html.includes('assets/screens/' + f));
   assert.ok(html.includes('assets/demo.mp4'));
   assert.match(html, /\[Student names\]/);
