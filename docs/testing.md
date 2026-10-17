@@ -125,3 +125,7 @@ crash and always return a complete, well-formed recipe.
 ## Landing page (`tests/node/landing.test.js`)
 
 LP-01 no inline scripts or handlers; LP-02 local links and assets exist; LP-03 placeholders labelled; LP-04 facts match provider files and audit event types; LP-05 no HTML-string sinks, reduced-motion blocks present; LP-06 polish.css linked on every page; LP-07 `/` serves the landing page.
+
+## Instruction detail (`tests/test_instruction_detail.cpp`)
+
+Offline-generator steps mention every listed ingredient, carry ingredient-specific prep, cooking cues and safety notes, never name an unlisted food (salt, pepper and water are allowed), and use a listed cooking fat or say none was listed.

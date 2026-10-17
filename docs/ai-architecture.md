@@ -55,3 +55,7 @@ Prompts are built by the engine from validated `RecipePreferences` only. Input p
 | Malformed or unsafe output | `AI_OUTPUT_REJECTED` event, next provider |
 | All providers fail | Offline generator, `usedFallback: true` |
 | Engine crash or timeout (`ENGINE_TIMEOUT_MS`, default 45 s) | Node returns a generic error; detail is logged server-side only |
+
+### Offline instructions
+
+`RecipeTemplateEngine` writes the fallback instructions from the ingredient types: per-ingredient prep (for example dice onion, cube paneer, rinse rice), cooking cues (translucent onion, golden paneer, no pink in meat), timing from the requested cooking time, a listed fat if any, dairy added off the boil, and a safety net that adds a step for any ingredient the template missed.

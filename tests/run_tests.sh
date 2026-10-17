@@ -11,7 +11,7 @@ CORE_SRCS="cpp-core/models/Recipe.cpp cpp-core/models/TraditionalRecipe.cpp cpp-
 PASS=0
 FAIL=0
 
-for t in test_matcher test_generator test_customizer test_storage test_storage_hardening test_llm_provider test_llm_providers_concrete test_model_router test_ai_orchestrator test_recipe_evaluator test_ai_output_validator test_security_pipeline test_prompt_security_scanner test_xss_detector test_security_events test_model_comparator test_recipe_builder test_ingredient_consistency; do
+for t in test_matcher test_generator test_customizer test_storage test_storage_hardening test_llm_provider test_llm_providers_concrete test_model_router test_ai_orchestrator test_recipe_evaluator test_ai_output_validator test_security_pipeline test_prompt_security_scanner test_xss_detector test_security_events test_model_comparator test_recipe_builder test_ingredient_consistency test_instruction_detail; do
   echo "=== Building $t ==="
   if g++ -std=c++17 -O2 tests/$t.cpp $CORE_SRCS -pthread -lcurl -o /tmp/$t; then
     echo "=== Running $t ==="
